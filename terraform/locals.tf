@@ -2,6 +2,8 @@ locals {
   payload_name  = "build.zip"
   display_name  = "tictactoe"
   function_name = "alexa-skill-movie-stream"
+  # GCP APIS
+  apis = ["billingbudgets.googleapis.com", "run.googleapis.com", "iam.googleapis.com", "cloudresourcemanager.googleapis.com", "cloudbilling.googleapis.com"]
   # Server locals
   server_name  = "${local.display_name}-server"
   server_image = "docker.io/peerjs/peerjs-server:latest"
