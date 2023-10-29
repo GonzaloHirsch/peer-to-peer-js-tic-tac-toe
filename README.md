@@ -1,5 +1,11 @@
 # Movie Map
 
+docker.io/peerjs/peerjs-server:latest
+
+curl https://unpkg.com/peerjs@1.5.1/dist/peerjs.min.js -o peerjs.min.js
+curl https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js -o axios.min.js
+
+
 This guide assists in the development of an Alexa skill, focusing on the given example of this skill.
 
 - [Infrastructure](#infrastructure)

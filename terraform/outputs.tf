@@ -1,4 +1,4 @@
-output "arn" {
-  value       = aws_lambda_function.default.arn
-  description = "ARN of the Lambda function to be executed."
+output "server_url" {
+  value       = google_cloud_run_service.default.traffic[0].url
+  description = "URL of the Cloud Run server."
 }

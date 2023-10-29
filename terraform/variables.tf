@@ -6,15 +6,16 @@ variable "region" {
   type        = string
   description = "Region of the resources."
 }
-variable "backend_url" {
+variable "base_server_key" {
   type        = string
-  description = "URL of the backend service."
+  description = "Server key to be used in connections."
 }
-variable "backend_key" {
+variable "gcp_region" {
   type        = string
-  description = "API key for the backend service."
+  description = "Region to use for GCP. By default is `europe-west1`."
+  default     = "europe-west1"
 }
-variable "skill_id" {
+variable "gcp_project_id" {
   type        = string
-  description = "ID for the skill verification."
+  description = "ID for the GCP project compute resources."
 }
