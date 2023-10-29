@@ -1,0 +1,39 @@
+# Info on the action
+name: Testing
+run-name: ${{ github.actor }} is testing 🚀
+
+# Only run on push to master
+on:
+  pull_request:
+    types: [synchronize, opened]
+
+jobs:
+  terraform_test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checking out code'
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      # Setting up Terraform to be able to use it afterwards
+      - name: 'Terraform Setup'
+        uses: hashicorp/setup-terraform@v2
+      # Setting up the AWS credentials
+      - name: 'Configure AWS credentials'
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.REGION }}
+      # Makes sure the Terraform code is correctly formatted
+      - name: 'Terraform Format'
+        run: terraform fmt -check -recursive
+        working-directory: terraform
+      # Initialize Terraform
+      - name: 'Terraform Init'
+        run: terraform init
+        working-directory: terraform
+      # Validate the Terraform configuration
+      - name: 'Terraform Validate'
+        run: terraform validate -no-color
+        working-directory: terraform

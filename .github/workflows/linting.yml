@@ -1,0 +1,26 @@
+# Info on the action
+name: Linting
+run-name: ${{ github.actor }} is linting the files 🚀
+
+# Only run on push to master
+on:
+  pull_request:
+    types: [synchronize, opened]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checking out code'
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      # Setting up Node, 18 is LTS
+      - name: 'Setting up Node'
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: 'Install'
+        run: npm ci
+      - name: 'Linting'
+        run: npm run lint

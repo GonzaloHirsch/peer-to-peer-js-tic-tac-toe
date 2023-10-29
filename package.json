@@ -1,0 +1,72 @@
+{
+  "name": "alexa-skill-movie-integrations",
+  "version": "1.2.1",
+  "description": "Source code for an Alexa skill that interacts with The Movie DB API in order to provide a service to look up stream locations based on the device country.",
+  "main": "src/index.js",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prettier --config .prettierrc 'src/**/*.js' --write",
+    "lint": "npx eslint src",
+    "markdown": "cat README.md > docs/development.md",
+    "toc": "npx markdown-toc README.md --no-firsth1",
+    "tf_format": "cd terraform && terraform fmt -recursive",
+    "tf_lint": "cd terraform && terraform fmt -check -recursive",
+    "tf_apply": "cd terraform && terraform apply -auto-approve"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GonzaloHirsch/alexa-skill-movie-integrations.git"
+  },
+  "author": "Gonzalo Hirsch <hirschgonzalo@gmail.com> (https://gonzalohirsch.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GonzaloHirsch/alexa-skill-movie-integrations/issues"
+  },
+  "homepage": "https://gonzalohirsch.github.io/alexa-skill-movie-integrations/",
+  "release": {
+    "branches": [
+      "main"
+    ],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      [
+        "@semantic-release/changelog",
+        {
+          "changelogFile": "docs/changelog.md"
+        }
+      ],
+      "@semantic-release/npm",
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "docs/changelog.md",
+            "package.json"
+          ]
+        }
+      ],
+      "@semantic-release/github"
+    ]
+  },
+  "dependencies": {
+    "ask-sdk-core": "2.14.0",
+    "axios": "1.4.0"
+  },
+  "devDependencies": {
+    "@semantic-release/changelog": "6.0.3",
+    "@semantic-release/commit-analyzer": "10.0.1",
+    "@semantic-release/git": "10.0.1",
+    "@semantic-release/github": "9.0.4",
+    "@semantic-release/npm": "10.0.4",
+    "@semantic-release/release-notes-generator": "11.0.4",
+    "eslint": "8.45.0",
+    "eslint-config-google": "0.14.0",
+    "eslint-config-prettier": "8.8.0",
+    "eslint-plugin-prettier": "5.0.0",
+    "markdown-toc": "1.2.0",
+    "prettier": "3.0.0",
+    "semantic-release": "21.0.7"
+  }
+}

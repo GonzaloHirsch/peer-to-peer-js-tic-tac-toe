@@ -1,0 +1,29 @@
+{
+    "release": {
+        "branches": [
+            "main"
+        ]
+    },
+    "repositoryUrl": "https://github.com/GonzaloHirsch/alexa-skill-movie-integrations.git",
+    "plugins": [
+        "@semantic-release/commit-analyzer",
+        "@semantic-release/release-notes-generator",
+        [
+            "@semantic-release/changelog",
+            {
+                "changelogFile": "docs/changelog.md"
+            }
+        ],
+        "@semantic-release/npm",
+        [
+            "@semantic-release/git",
+            {
+                "assets": [
+                    "docs/changelog.md",
+                    "package.json"
+                ]
+            }
+        ],
+        "@semantic-release/github"
+    ]
+}

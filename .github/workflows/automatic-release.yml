@@ -1,0 +1,97 @@
+# Info on the action
+name: Automatic Release
+run-name: ${{ github.actor }} is automatically releasing 🚀
+
+on:
+  # Run automatically on main pushes
+  push:
+    branches:
+      - main
+  # Or run on manual trigger
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning'
+
+jobs:
+  terraform_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checking out code'
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      # Setting up Terraform to be able to use it afterwards
+      - name: 'Terraform Setup'
+        uses: hashicorp/setup-terraform@v2
+      # Setting up Node, 18 is LTS
+      - name: 'Setting up Node'
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: 'Installing dependencies'
+        run: npm install --omit=dev
+      # Setting up the AWS credentials
+      - name: 'Configure AWS credentials'
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.REGION }}
+      # Makes sure the Terraform code is correctly formatted
+      - name: 'Terraform Format'
+        run: terraform fmt -check -recursive
+        working-directory: terraform
+      # Initialize Terraform
+      - name: 'Terraform Init'
+        run: terraform init
+        working-directory: terraform
+      # Validate the Terraform configuration
+      - name: 'Terraform Validate'
+        run: terraform validate -no-color
+        working-directory: terraform
+      # Apply the Terraform configuration
+      - name: 'Terraform Apply'
+        run: terraform apply --auto-approve
+        working-directory: terraform
+        # Make sure we have the correct environment variables as secrets
+        env:
+          TF_VAR_account_id: ${{ secrets.account_id }}
+          TF_VAR_region: ${{ secrets.REGION }}
+          TF_VAR_backend_url: ${{ secrets.BACKEND_URL }}
+          TF_VAR_backend_key: ${{ secrets.BACKEND_KEY }}
+          TF_VAR_skill_id: ${{ secrets.SKILL_ID }}
+
+  # As per https://github.com/semantic-release/semantic-release/blob/master/docs/recipes/ci-configurations/github-actions.md
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Generate token'
+        id: generate_token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.BOT_APP_ID }}
+          private_key: ${{ secrets.BOT_PRIVATE_KEY }}
+      # Check out the code to be able to deploy
+      - name: 'Checking out code'
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ steps.generate_token.outputs.token }}
+      # Setting up Node, 18 is LTS
+      - name: 'Setting up Node'
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      # Make sure all the dependencies are ok and installed
+      - name: 'Installing dependencies'
+        run: npm ci
+      - name: 'Verifying the signatures'
+        run: npm audit signatures
+      # Install semantic release
+      - name: 'Releasing via Semantic Release'
+        run: npx semantic-release@21
+        env:
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
