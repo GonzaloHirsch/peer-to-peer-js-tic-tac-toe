@@ -2,9 +2,11 @@
 
 docker.io/peerjs/peerjs-server:latest
 
-curl https://unpkg.com/peerjs@1.5.1/dist/peerjs.min.js -o peerjs.min.js
-curl https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js -o axios.min.js
+Need to log in with gcloud and also `gcloud auth application-default set-quota-project PROJECT_ID`
 
+`gcloud auth application-default set-quota-project super-tic-tac-toe-server`
+
+Manually enable cloud billin https://console.developers.google.com/apis/api/cloudbilling.googleapis.com/overview?project=super-tic-tac-toe-server (cloudbilling.googleapis.com)
 
 This guide assists in the development of an Alexa skill, focusing on the given example of this skill.
 

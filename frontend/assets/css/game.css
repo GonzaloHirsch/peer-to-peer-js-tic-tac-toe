@@ -1,0 +1,251 @@
+/* 
+------------------------------------------------------------------------------------------
+Instructions 
+------------------------------------------------------------------------------------------
+*/
+.game_instructions {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  color: white;
+}
+
+/* 
+------------------------------------------------------------------------------------------
+Play Bounds 
+------------------------------------------------------------------------------------------
+*/
+.play_screen {
+  width: 270px;
+  height: 270px;
+  max-width: 60rem;
+  max-height: 60rem;
+  border: 0.25em solid black;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 
+------------------------------------------------------------------------------------------
+Sizes and responsiveness
+------------------------------------------------------------------------------------------
+*/
+.board,
+.game_row {
+  height: 90px;
+}
+
+.board_cell {
+  height: 30px;
+  padding: 1px;
+  border: solid black 1px;
+}
+
+@media only screen and (min-width: 500px) {
+  .play_screen {
+    width: 450px;
+    height: 450px;
+  }
+  .board,
+  .game_row {
+    height: 150px;
+  }
+  .board_cell {
+    height: 50px;
+  }
+}
+
+@media only screen and (min-width: 700px) {
+  .play_screen {
+    width: 630px;
+    height: 630px;
+  }
+  .board,
+  .game_row {
+    height: 210px;
+  }
+  .board_cell {
+    height: 70px;
+  }
+}
+
+/* 
+------------------------------------------------------------------------------------------
+Display
+------------------------------------------------------------------------------------------
+*/
+.game_box,
+.board {
+  display: grid;
+  grid-template-rows: auto auto auto;
+}
+
+.game_row,
+.board_row {
+  display: grid;
+  grid-template-columns: auto auto auto;
+}
+
+/* 
+------------------------------------------------------------------------------------------
+Game Box
+------------------------------------------------------------------------------------------
+*/
+.game_box {
+  flex-direction: column;
+  gap: 2px;
+  background: black;
+}
+
+/* 
+------------------------------------------------------------------------------------------
+Game Row
+------------------------------------------------------------------------------------------
+*/
+.game_row {
+  flex-direction: row;
+  gap: 2px;
+}
+
+/* 
+------------------------------------------------------------------------------------------
+Board
+------------------------------------------------------------------------------------------
+*/
+.board {
+  flex-direction: column;
+  position: relative;
+  transition: color ease 0.3s;
+}
+
+#game-box[turn='O'] .board[selected='true'] {
+  /* text-blue-100 */
+  background-color: rgb(219 234 254);
+}
+
+#game-box[turn='X'] .board[selected='true'] {
+  /* text-red-100 */
+  background-color: rgb(254 226 226);
+}
+
+.board[state='O']::after {
+  content: url(../icons/circle.svg);
+  backdrop-filter: blur(3px);
+  display: block;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.board[state='X']::after {
+  content: url(../icons/cross.svg);
+  backdrop-filter: blur(3px);
+  display: block;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.board[state='TIE']::after {
+  content: url(../icons/dash.svg);
+  backdrop-filter: blur(3px);
+  display: block;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* 
+------------------------------------------------------------------------------------------
+Board Row
+------------------------------------------------------------------------------------------
+*/
+
+.board_row {
+  flex-direction: row;
+}
+
+/* 
+------------------------------------------------------------------------------------------
+Board Cell
+------------------------------------------------------------------------------------------
+*/
+.board_cell {
+  display: block;
+  background: white;
+}
+
+#game-box[turn='O'][state='CHOOSE_CELL']
+  .board[state='EMPTY'][selected='true']
+  .board_cell {
+  background-color: rgb(219 234 254);
+}
+
+#game-box[turn='X'][state='CHOOSE_CELL']
+  .board[state='EMPTY'][selected='true']
+  .board_cell {
+  background-color: rgb(254 226 226);
+}
+
+#game-box[turn='X'][state='CHOOSE_CELL']
+  .board[state='EMPTY'][selected='true']
+  .board_cell[state='EMPTY']:hover {
+  /* text-red-200 */
+  background-color: rgb(254 202 202) !important;
+  cursor: pointer;
+}
+
+#game-box[turn='O'][state='CHOOSE_CELL']
+  .board[state='EMPTY'][selected='true']
+  .board_cell[state='EMPTY']:hover {
+  /* text-blue-200 */
+  background-color: rgb(191 219 254) !important;
+  cursor: pointer;
+}
+
+#game-box[turn='O'][state='CHOOSE_BOARD']
+  .board[state='EMPTY']:hover
+  .board_cell,
+#game-box[turn='O'][state='CHOOSE_CELL'][choose='true']
+  .board[state='EMPTY']:not([selected='true']):hover
+  .board_cell {
+  background-color: rgb(219 234 254);
+  cursor: pointer;
+}
+
+#game-box[turn='X'][state='CHOOSE_BOARD']
+  .board[state='EMPTY']:hover
+  .board_cell,
+#game-box[turn='X'][state='CHOOSE_CELL'][choose='true']
+  .board[state='EMPTY']:not([selected='true']):hover
+  .board_cell {
+  background-color: rgb(254 226 226);
+  cursor: pointer;
+}
+
+.board_cell[state='O']::after {
+  content: url(../icons/circle.svg);
+  display: block;
+  /* text-red-700 */
+  color: rgb(185 28 28);
+}
+
+.board_cell[state='X']::after {
+  content: url(../icons/cross.svg);
+  display: block;
+  /* text-blue-700 */
+  color: rgb(29 78 216);
+}
+
+.board_cell:not([state='EMPTY']):hover {
+  cursor: not-allowed;
+}

@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+/* Text colors: https://tailwindcss.com/docs/text-color */
+
+/* Basics */
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: rgb(31 41 55);
+}
+
+body {
+  max-width: 80rem; /* 1280px */
+  padding: 1rem;
+  margin: 0 auto 0 auto;
+}
+
+/* Margin */
+.mx_auto {
+  margin: 0 auto 0 auto;
+}
+
+/* Titles */
+.heading {
+  font-weight: bold;
+  text-align: center;
+}
+
+.h1 {
+  font-size: 3rem; /* 48px */
+  /* text-gray-800 */
+  color: rgb(31 41 55);
+}
+
+.h2 {
+  font-size: 2.5rem; /* 48px */
+  /* text-gray-800 */
+  color: rgb(31 41 55);
+}
+
+.peer_info {
+  font-size: large;
+  /* text-gray-400 */
+  color: rgb(156 163 175);
+}
+
+/* Font */
+body {
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    'Open Sans',
+    sans-serif;
+  line-height: 1;
+}
+
+.italic {
+  font-style: italic;
+}
+
+/* Sizing */
+.text_small {
+  font-size: small;
+}
+
+.text_medium {
+  font-size: medium;
+}
+
+.text_large {
+  font-size: large;
+}
+
+.text_xlarge {
+  font-size: x-large;
+}
+
+/* Alignment */
+.text_center {
+  text-align: center;
+}
+
+/* Visibility */
+.hidden {
+  display: none;
+}
+
+.hidden_ensure {
+  display: none !important;
+}
+
+/* Buttons */
+.button {
+  padding: 0.5em 0.25em 0.5em 0.25em;
+  border: 0.25em solid rgb(31 41 55);
+  background-color: transparent;
+  cursor: pointer;
+  opacity: 1;
+}
+
+.button:hover {
+  background-color: rgba(31 41 55 100);
+}
+
+.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.start_instructions,
+.start_instructions + * {
+  max-width: 56rem; /* 896px */
+  margin: 0 auto 0 auto;
+}
