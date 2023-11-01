@@ -18,7 +18,10 @@ const CLASSES = {
 const IDS = {
   GAME_BOX: 'game-box',
   INSTRUCTIONS: 'game-instructions',
-  PEER_INFO: 'peer-info'
+  COVER: 'game-cover',
+  PEER_INFO: 'peer-info',
+  END_COVER: 'end-cover',
+  WINNER: 'winner'
 };
 // Cell states
 const STATES = {
@@ -79,4 +82,9 @@ const WIN_CONFIGS = [
 const WIN_OPTIONS = {
   [STATES.X]: `${STATES.X}${STATES.X}${STATES.X}`,
   [STATES.O]: `${STATES.O}${STATES.O}${STATES.O}`
+};
+// Playable modes
+const PLAY_MODE = {
+  LOCAL: 'LOCAL',
+  P2P: 'P2P'
 };

@@ -1,5 +1,5 @@
 // Local copy of the game state
-const gameState = {};
+let gameState = {};
 let gameBox = undefined;
 
 /* 
@@ -39,6 +39,7 @@ const buildTicTacToe = (offsetX, offsetY) => {
 
 const buildBoard = () => {
   const gameBox = document.getElementById(IDS.GAME_BOX);
+  gameBox.innerHTML = '';
   for (let i = 0; i < 3; i++) {
     const divRow = document.createElement('div');
     gameBox.appendChild(divRow);
@@ -103,8 +104,13 @@ const handleCellClick = (e, elem) => {
       // Check win condition against the big board
       if (gameState.completedBoards >= 3) {
         let overallWinner = checkWinCondition(gameState.overallBoard);
+        // If there's a winner, end the game
         if (overallWinner) {
-          console.log(`${overallWinner} won the game!`);
+          endGame(overallWinner);
+          return;
+        } else if (gameState.completedBoards === 9) {
+          endGame(STATES.TIE);
+          return;
         }
       }
     }
@@ -127,7 +133,6 @@ const handleBoardClick = (e, elem, x, y) => {
   if (!gameState.canChooseBoard) {
     return;
   }
-  console.log("BOARD CLICK");
   // Update the selected state of the previous board
   if (gameState.selectedBoardElem) {
     gameState.selectedBoardElem.setAttribute('selected', 'false');
@@ -174,10 +179,8 @@ const getNextPlayingBoard = (x, y) => {
   // Update visual state of old board.
   // Always remove the highlight from the previous one
   gameState.selectedBoardElem.setAttribute('selected', 'false');
-  console.log(gameState.selectedBoardElem);
 
   // If the next one is not empty, next player can choose any one
-  console.log(gameState.overallBoard[x][y]);
   if (gameState.overallBoard[x][y] !== STATES.EMPTY) {
     gameState.state = GAME_STATES.CHOOSE_BOARD;
     gameState.canChooseBoard = true;
@@ -221,12 +224,23 @@ const updateBoardWithWinner = (x, y, winner) => {
   gameState.overallBoard[x][y] = winner;
 };
 
+const enableGameVisually = () => {
+  const cover = document.getElementById(IDS.COVER);
+  cover.classList.add('hidden_ensure');
+};
+
 /* 
 ------------------------------------------------------------------------------------------
 Game Lifecycle
 ------------------------------------------------------------------------------------------
 */
-const startGame = () => {
+const startGame = (playMode) => {
+  // Rebuilds the board
+  buildBoard();
+  // Resets the state
+  gameState = {};
+  // Sets initial values
+  gameState.playMode = playMode;
   gameState.turn = STATES.X;
   gameState.state = GAME_STATES.CHOOSE_BOARD;
   gameState.board = buildInternalBoard();
@@ -238,8 +252,33 @@ const startGame = () => {
   gameBox = document.getElementById(IDS.GAME_BOX);
   // Switch turn to the current player, this will leave the player
   switchPlayerTurn(STATES.X);
+  // Visually enable the game
+  enableGameVisually();
+};
+
+const startGameLocal = () => {
+  // Start the game locally
+  startGame(PLAY_MODE.LOCAL);
+};
+
+const startGameP2P = () => {
+  // Start the game in P2P mode
+  startGame(PLAY_MODE.P2P);
+};
+
+const endGame = (winner) => {
+  const endElem = document.getElementById(IDS.END_COVER);
+  // Ensure there is a winner
+  // TODO, handle no winner
+  if (winner !== STATES.TIE) {
+    endElem.children[0].innerHTML = `The winner is: <span id="winner"></span>`;
+    const winnerElem = document.getElementById(IDS.WINNER);
+    winnerElem.innerHTML = winner;
+  } else {
+    endElem.children[0].innerHTML = 'There is no winner, it is a tie!';
+  }
+  endElem.classList.remove('hidden_ensure');
 };
 
 // Ensure to call functions as early as possible for experience
 buildBoard();
-startGame();

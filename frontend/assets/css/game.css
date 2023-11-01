@@ -3,7 +3,8 @@
 Instructions 
 ------------------------------------------------------------------------------------------
 */
-.game_instructions {
+.game_cover,
+.end_cover {
   position: absolute;
   top: 0;
   width: 100%;
@@ -13,7 +14,28 @@ Instructions
   flex-direction: column;
   text-align: center;
   justify-content: center;
-  color: white;
+  color: white !important;
+  font-size: x-large;
+}
+
+.game_cover *,
+.end_cover * {
+  color: white !important;
+  width: 85%;
+  margin: 0 auto 0 auto;
+  line-height: 1.25;
+}
+
+.game_options {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 0 auto 0 auto;
+}
+
+.game_options * {
+  margin: 1rem;
 }
 
 /* 
@@ -26,9 +48,10 @@ Play Bounds
   height: 270px;
   max-width: 60rem;
   max-height: 60rem;
-  border: 0.25em solid black;
+  border: 0.25rem solid black;
   position: relative;
   overflow: hidden;
+  border-radius: 5px;
 }
 
 /* 

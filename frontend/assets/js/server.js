@@ -22,7 +22,7 @@ const startServerConnection = () => {
     `.${CLASSES.HIDDEN_WHEN_NO_ID}`
   );
   const peerInfoElem = document.getElementById(IDS.PEER_INFO);
-  const instructions = document.getElementById(IDS.INSTRUCTIONS);
+  const cover = document.getElementById(IDS.COVER);
   /*
   // Create the instance of the peer with the UUID
   const peer = new Peer(UUID, SERVER_CONNECTION);
@@ -38,7 +38,7 @@ const startServerConnection = () => {
   });
   */
   hiddenElems.forEach((elem) => elem.classList.remove('hidden'));
-  instructions.classList.add('hidden_ensure');
+  cover.classList.add('hidden_ensure');
 };
 
 const handleTestClick = () => {

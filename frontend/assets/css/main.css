@@ -7,45 +7,13 @@
   padding: 0;
   border: 0;
   color: rgb(31 41 55);
+  line-height: 1;
 }
 
 body {
   max-width: 80rem; /* 1280px */
   padding: 1rem;
   margin: 0 auto 0 auto;
-}
-
-/* Margin */
-.mx_auto {
-  margin: 0 auto 0 auto;
-}
-
-/* Titles */
-.heading {
-  font-weight: bold;
-  text-align: center;
-}
-
-.h1 {
-  font-size: 3rem; /* 48px */
-  /* text-gray-800 */
-  color: rgb(31 41 55);
-}
-
-.h2 {
-  font-size: 2.5rem; /* 48px */
-  /* text-gray-800 */
-  color: rgb(31 41 55);
-}
-
-.peer_info {
-  font-size: large;
-  /* text-gray-400 */
-  color: rgb(156 163 175);
-}
-
-/* Font */
-body {
   font-family:
     ui-sans-serif,
     system-ui,
@@ -55,11 +23,90 @@ body {
   line-height: 1;
 }
 
+/* 
+------------------------------------------------------------------------------------------
+Heading
+------------------------------------------------------------------------------------------
+*/
+.heading {
+  font-weight: bold;
+  text-align: center;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  /* text-gray-800 */
+  color: rgb(31 41 55);
+}
+
+h1 {
+  font-size: 2rem; /* 32px */
+  margin-bottom: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+h2 {
+  font-size: 1.75rem; /* 28px */
+  margin-bottom: 1.5rem;
+  margin-top: 1.25rem;
+}
+
+h3 {
+  font-size: 1.5rem; /* 28px */
+  margin-bottom: 1.5rem;
+  margin-top: 1rem;
+}
+
+h4 {
+  font-size: 1.375rem; /* 28px */
+  margin-bottom: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+@media only screen and (min-width: 500px) {
+  h1 {
+    font-size: 3rem; /* 48px */
+  }
+
+  h2 {
+    font-size: 2.5rem; /* 40px */
+  }
+
+  h3 {
+    font-size: 2rem; /* 36px */
+  }
+
+  h4 {
+    font-size: 1.75rem; /* 28px */
+  }
+}
+
+/* 
+------------------------------------------------------------------------------------------
+Margin
+------------------------------------------------------------------------------------------
+*/
+.mx_auto {
+  margin: 0 auto 0 auto;
+}
+
+/* 
+------------------------------------------------------------------------------------------
+Text Format
+------------------------------------------------------------------------------------------
+*/
 .italic {
   font-style: italic;
 }
 
-/* Sizing */
+/* 
+------------------------------------------------------------------------------------------
+Text Size
+------------------------------------------------------------------------------------------
+*/
 .text_small {
   font-size: small;
 }
@@ -76,12 +123,20 @@ body {
   font-size: x-large;
 }
 
-/* Alignment */
+/* 
+------------------------------------------------------------------------------------------
+Alignment
+------------------------------------------------------------------------------------------
+*/
 .text_center {
   text-align: center;
 }
 
-/* Visibility */
+/* 
+------------------------------------------------------------------------------------------
+Visibility
+------------------------------------------------------------------------------------------
+*/
 .hidden {
   display: none;
 }
@@ -90,17 +145,27 @@ body {
   display: none !important;
 }
 
-/* Buttons */
+/* 
+------------------------------------------------------------------------------------------
+Button
+------------------------------------------------------------------------------------------
+*/
 .button {
-  padding: 0.5em 0.25em 0.5em 0.25em;
-  border: 0.25em solid rgb(31 41 55);
+  padding: 0.5rem 0.25rem 0.5rem 0.25rem;
+  border: 0.25rem solid rgb(31, 41, 55);
   background-color: transparent;
   cursor: pointer;
   opacity: 1;
+  border-radius: 5px;
+  font-size: x-large;
+  transition:
+    background-color ease 0.3s,
+    color ease 0.3s;
 }
 
 .button:hover {
-  background-color: rgba(31 41 55 100);
+  background-color: rgba(31, 41, 55, 0.85);
+  color: white;
 }
 
 .disabled {
@@ -108,8 +173,31 @@ body {
   opacity: 0.5;
 }
 
+/* 
+------------------------------------------------------------------------------------------
+Instructions
+------------------------------------------------------------------------------------------
+*/
 .start_instructions,
-.start_instructions + * {
+.start_instructions ~ * {
   max-width: 56rem; /* 896px */
-  margin: 0 auto 0 auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.start_instructions ~ p {
+  font-size: larger;
+  margin-bottom: 1rem;
+}
+
+/* 
+------------------------------------------------------------------------------------------
+Peer Info
+------------------------------------------------------------------------------------------
+*/
+
+.peer_info {
+  font-size: large;
+  /* text-gray-400 */
+  color: rgb(156 163 175);
 }

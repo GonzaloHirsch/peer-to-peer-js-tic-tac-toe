@@ -9,33 +9,66 @@
 <body>
     <h1 id="title" class="heading h1 text_center">Peer to Peer <br><em>(SUPER)</em> Tic Tac Toe
     </h1>
-    <h2 class="heading h2 text_center italic text_xlarge" style="margin-top: .5em;">By <a
+    <h2 class="heading h2 text_center italic text_xlarge" style="margin-top: .5rem;">By <a
             href="https://gonzalohirsch.com/" target="_blank" rel="noopener">Gonzalo Hirsch</a></h2>
-    <div id="play-screen" class="play_screen mx_auto" style="margin-top: 2em;">
+    <div id="play-screen" class="play_screen mx_auto" style="margin-top: 2rem;">
         <div id="server-select" class="hidden">
 
         </div>
-        <div id="game-box" class="hidden game_box">
+        <div id="game-box" class="game_box">
 
         </div>
-        <div id="game-instructions" class="game_instructions">
-            <p>To start the game, click on connect to server</p>
-            <div class="flex flex-row items-center justify-center mt-4">
-                <button onclick="startServerConnection()" class="button">Connect to Server</button>
-                <button onclick="endServerConnection()" class="button">Disconnect from Server</button>
-            </div>
+        <div id="game-cover" class="game_cover">
+            <p>Start the game by selecting which game mode you want. You can opt for local multiplayer or P2P.</p>
+        </div>
+        <div id="end-cover" class="end_cover hidden_ensure">
+            <p>The winner is: <span id="winner"></span></p>
         </div>
     </div>
-    <h2 id="peer-info" class="peer_info text_center italic hidden hidden-when-no-id" style="margin-top: 1em;">Your
+    <div class="game_options" style="margin-top: 1rem;">
+        <button onclick="startServerConnection()" class="button">P2P Multiplayer</button>
+        <button onclick="endServerConnection()" class="button hidden">Disconnect from Server</button>
+        <button onclick="startGameLocal()" class="button">Local Multiplayer</button>
+    </div>
+    <h2 id="peer-info" class="peer_info text_center italic hidden hidden-when-no-id" style="margin-top: 1rem;">Your
         peer ID is:
     </h2>
-    <p class="italic peer_info text_small text_center hidden hidden-when-no-id" style="margin-top: .5em;">In case you
+    <p class="italic peer_info text_small text_center hidden hidden-when-no-id" style="margin-top: .5rem;">In case you
         want to identify one of
         your friends to play with.
     </p>
-    <h2 class="h2 text_center start_instructions" style="margin-top: 1.5ƒem; margin-bottom: 1em;">Instructions</h2>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima id nobis quos at aperiam ex molestiae ipsum eaque
-        nam cum consectetur nulla non, nesciunt odio eius facilis eum, ratione temporibus.</p>
+    <h2 class="text_center start_instructions" style="margin-top: 1.5rem; margin-bottom: 1rem;">Instructions</h2>
+    <p><em>(SUPER)</em> Tic Tac Toe is an alternative version of Tic Tac Toe, in which strategy plays a more significant
+        role. It's Tic
+        Tac Toe within Tic Tac Toe.</p>
+    <p><strong>You play on nine (9, yeah) Tic Tac Toe boards simultaneously</strong>, and the results of those boards
+        contribute to a
+        much
+        larger board. When you complete one mini-board, that mini-board cannot be changed anymore, and the result stays
+        on
+        the
+        large board.</p>
+    <p>But here's the caveat. The cell you select on the mini-board determines the next mini-board you are playing on!
+        It
+        means
+        that sometimes you will sacrifice one mini-board for the sake of the large board.</p>
+    <h3 class="">In-Depth Instructions</h3>
+    <h4 class="">Game Start</h4>
+    <p>The game starts by allowing the first player to select the mini-board to play on. Once the first player chooses a
+        cell
+        within the mini-board, the mechanism to restrict the mini-boards starts to apply.</p>
+    <h4 class="">Turns</h4>
+    <p>As the game progresses, more cells from the mini-boards will fill up. As this happens, you will face the
+        following
+        scenario.</p>
+    <p>The mini-board you are faced to play on already has a winner. In this case, you can select which mini-board to
+        play on
+        next.</p>
+    <p>It happens when you select a cell that points to another mini-board or the same mini-board you are currently on.
+    </p>
+    <h4 class="">Notes</h4>
+    <p>If you can select the mini-board to play next, you can change your choice before clicking on one of the cells.
+    </p>
     <div class="share-controls">
         <h3>Share</h3>
         <div class="share-buttons">
