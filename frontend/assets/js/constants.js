@@ -21,7 +21,8 @@ const IDS = {
   COVER: 'game-cover',
   PEER_INFO: 'peer-info',
   END_COVER: 'end-cover',
-  WINNER: 'winner'
+  WINNER: 'winner',
+  SERVER_LIST: 'server-list'
 };
 // Cell states
 const STATES = {
@@ -87,4 +88,9 @@ const WIN_OPTIONS = {
 const PLAY_MODE = {
   LOCAL: 'LOCAL',
   P2P: 'P2P'
+};
+// Tempalte to send messages for the server
+const SERVER_MESSAGE_TEMPLATE = {
+  data: {},
+  status: 200
 };
