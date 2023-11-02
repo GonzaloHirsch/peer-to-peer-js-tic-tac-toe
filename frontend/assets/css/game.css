@@ -48,9 +48,9 @@ Play Bounds
   height: 270px;
   max-width: 60rem;
   max-height: 60rem;
-  border: 0.25rem solid black;
   position: relative;
   overflow: hidden;
+  border: 0.25rem solid black;
   border-radius: 5px;
 }
 

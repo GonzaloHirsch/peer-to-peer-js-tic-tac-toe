@@ -159,8 +159,8 @@ Button
   border-radius: 5px;
   font-size: x-large;
   transition:
-    background-color ease 0.3s,
-    color ease 0.3s;
+    background-color ease 0.2s,
+    color ease 0.2s;
 }
 
 .button:hover {
@@ -195,9 +195,57 @@ Instructions
 Peer Info
 ------------------------------------------------------------------------------------------
 */
-
 .peer_info {
   font-size: large;
   /* text-gray-400 */
   color: rgb(156 163 175);
+}
+
+/* 
+------------------------------------------------------------------------------------------
+Server List
+------------------------------------------------------------------------------------------
+*/
+.server_list {
+  overflow-y: scroll;
+  width: 270px;
+  max-height: 200px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  border: 0.25rem solid black;
+  border-radius: 5px;
+}
+
+@media only screen and (min-width: 500px) {
+  .server_list {
+    width: 450px;
+  }
+}
+
+@media only screen and (min-width: 700px) {
+  .server_list {
+    width: 630px;
+  }
+}
+
+.server_list button {
+  font-size: large;
+  padding: 1rem 0.5rem;
+  cursor: pointer;
+  transition:
+    background-color ease 0.2s,
+    color ease 0.2s;
+}
+
+.server_list div {
+  font-size: large;
+  padding: 1rem 0.5rem;
+}
+
+.server_list button:hover {
+  background-color: rgba(31, 41, 55, 0.85);
+  color: white;
 }

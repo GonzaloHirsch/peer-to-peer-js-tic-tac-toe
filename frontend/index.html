@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>P2P (SUPER) Tic Tac Toe | Gonzalo Hirsch</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
 </head>
 
 <body>
@@ -19,11 +20,15 @@
 
         </div>
         <div id="game-cover" class="game_cover">
-            <p>Start the game by selecting which game mode you want. You can opt for local multiplayer or P2P.</p>
+            <p>Start the game by selecting which game mode you want. You can opt for local multiplayer or P2P. If you
+                choose to play P2P, you need to select your opponent from the peer list.</p>
         </div>
         <div id="end-cover" class="end_cover hidden_ensure">
             <p>The winner is: <span id="winner"></span></p>
         </div>
+    </div>
+    <div id="server-list" class="server_list hidden_ensure">
+
     </div>
     <div class="game_options" style="margin-top: 1rem;">
         <button onclick="startServerConnection()" class="button">P2P Multiplayer</button>
