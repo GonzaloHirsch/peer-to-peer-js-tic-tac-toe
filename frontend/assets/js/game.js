@@ -1,6 +1,7 @@
 // Local copy of the game state
 let gameState = {};
 let gameBox = undefined;
+let turnCover = undefined;
 
 /* 
 ------------------------------------------------------------------------------------------
@@ -15,7 +16,7 @@ const buildTicTacToe = (offsetX, offsetY) => {
   board.setAttribute('state', STATES.EMPTY);
   board.setAttribute(
     'onclick',
-    `handleBoardClick(event, this, ${offsetX}, ${offsetY})`
+    `handleBoardClick(event, ${offsetX}, ${offsetY})`
   );
   board.classList.add('board');
   for (let i = 0; i < 3; i++) {
@@ -24,12 +25,16 @@ const buildTicTacToe = (offsetX, offsetY) => {
     divRow.classList.add('board_row');
     for (let j = 0; j < 3; j++) {
       const buttonCell = document.createElement('button');
+      buttonCell.setAttribute('id', getCellId(offsetX, offsetY, i, j));
       buttonCell.setAttribute('cellX', i);
       buttonCell.setAttribute('cellY', j);
       buttonCell.setAttribute('boardX', offsetX);
       buttonCell.setAttribute('boardY', offsetY);
       buttonCell.setAttribute('state', STATES.EMPTY);
-      buttonCell.setAttribute('onclick', 'handleCellClick(event, this)');
+      buttonCell.setAttribute(
+        'onclick',
+        `handleCellClickWrapper(event, ${offsetX}, ${offsetY}, ${i}, ${j})`
+      );
       buttonCell.classList.add('board_cell');
       divRow.appendChild(buttonCell);
     }
@@ -70,26 +75,74 @@ const buildInternalOverallBoard = (initialState) => {
 Events
 ------------------------------------------------------------------------------------------
 */
-const handleCellClick = (e, elem) => {
+const handleCellClickWrapper = (
+  e,
+  boardX,
+  boardY,
+  cellX,
+  cellY,
+  removeMovement = false
+) => {
+  // Run the move and check it's valid
+  const validMove = handleCellClick(
+    e,
+    document.getElementById(getCellId(boardX, boardY, cellX, cellY)),
+    boardX,
+    boardY,
+    cellX,
+    cellY,
+    removeMovement
+  );
+  // If the move is entirely valid and is playing in P2P, send the move
+  if (validMove && gameState.playMode === PLAY_MODE.P2P) {
+    // Movements to send, include at least cell selection
+    let movements = [
+      {
+        type: GAME_STATES.CHOOSE_CELL,
+        coords: [boardX, boardY, cellX, cellY]
+      }
+    ];
+    // If the player was able to choose the board, must do that too
+    if (gameState.movementChoseBoard) {
+      movements.unshift({
+        type: GAME_STATES.CHOOSE_BOARD,
+        coords: [boardX, boardY]
+      });
+    }
+    // Send the movements to the other player
+    sendMovement({
+      movements: movements
+    });
+  }
+};
+
+const handleCellClick = (
+  e,
+  elem,
+  boardX,
+  boardY,
+  cellX,
+  cellY,
+  removeMovement = false
+) => {
+  // Ensure it's the turn of the player
+  if (!isPlayerTurn() && !removeMovement) return false;
   // Ensure it fires only on choose cell
-  if (gameState.state !== GAME_STATES.CHOOSE_CELL) return;
+  if (gameState.state !== GAME_STATES.CHOOSE_CELL) return false;
   // Ensure it can only be clicked if on an EMPTY state.
-  if (elem.getAttribute('state') !== STATES.EMPTY) return;
+  if (elem.getAttribute('state') !== STATES.EMPTY) return false;
   // Ensure the cell clicked is one of the ones from the selected board.
-  const boardX = parseInt(elem.getAttribute('boardx'));
-  const boardY = parseInt(elem.getAttribute('boardy'));
-  const cellX = parseInt(elem.getAttribute('cellx'));
-  const cellY = parseInt(elem.getAttribute('celly'));
   if (
     boardX !== gameState.selectedBoardX ||
     boardY !== gameState.selectedBoardY
   )
-    return;
+    return false;
   // Make the necessary state changes
   elem.setAttribute('state', gameState.turn);
   elem.setAttribute('disabled', 'true');
   // Update the internal state
   gameState.board[boardX][boardY][cellX][cellY] = gameState.turn;
+  gameState.movementChoseBoard = gameState.canChooseBoard;
   // Update the stats
   gameState.completedCells[boardX][boardY]++;
   // Verify win condition in mini board
@@ -107,10 +160,10 @@ const handleCellClick = (e, elem) => {
         // If there's a winner, end the game
         if (overallWinner) {
           endGame(overallWinner);
-          return;
+          return true;
         } else if (gameState.completedBoards === 9) {
           endGame(STATES.TIE);
-          return;
+          return true;
         }
       }
     }
@@ -124,10 +177,13 @@ const handleCellClick = (e, elem) => {
   // Hand off to other player
   switchPlayerTurn(getOppositeState(gameState.turn));
   // Preven board click at this point
-  e.stopPropagation();
+  if (e) e.stopPropagation();
+  return true;
 };
 
-const handleBoardClick = (e, elem, x, y) => {
+const handleBoardClick = (e, x, y, removeMovement = false) => {
+  // Ensure it's the turn of the player
+  if (!isPlayerTurn() && !removeMovement) return false;
   // Ensure this fires only on choose board
   // It can also happen if the player has the opportunity to choose the board
   if (!gameState.canChooseBoard) {
@@ -162,13 +218,30 @@ const switchPlayerTurn = (nextState) => {
   gameBox.setAttribute('turn', nextState);
   gameBox.setAttribute('state', gameState.state);
   gameBox.setAttribute('choose', gameState.canChooseBoard);
+  // Switch the turn visually as well
+  switchPlayerTurnVisually();
+};
+
+const switchPlayerTurnVisually = () => {
+  console.log(gameState.turn, gameState.player);
+  // If it's the player turn, enable it for them
+  if (gameState.playMode === PLAY_MODE.P2P) {
+    if (isPlayerTurn()) {
+      turnCover.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
+    } else {
+      turnCover.classList.remove(CSS_CLASSES.ENSURE_HIDDEN);
+    }
+  }
 };
 
 const getOppositeState = (currState) => {
   return currState === STATES.X ? STATES.O : STATES.X;
 };
 
+const isPlayerTurn = () => gameState.turn === gameState.player;
+
 const getBoardId = (x, y) => `board_${x}_${y}`;
+const getCellId = (bx, by, cx, cy) => `cell_${bx}_${by}_${cx}_${cy}`;
 
 const getNextPlayingBoard = (x, y) => {
   // Ensure the types for the variables, which must be integers
@@ -226,7 +299,7 @@ const updateBoardWithWinner = (x, y, winner) => {
 
 const enableGameVisually = () => {
   const cover = document.getElementById(IDS.COVER);
-  cover.classList.add('hidden_ensure');
+  cover.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
 };
 
 /* 
@@ -234,13 +307,14 @@ const enableGameVisually = () => {
 Game Lifecycle
 ------------------------------------------------------------------------------------------
 */
-const startGame = (playMode) => {
+const startGame = (playMode, firstPlayer) => {
   // Rebuilds the board
   buildBoard();
   // Resets the state
   gameState = {};
   // Sets initial values
   gameState.playMode = playMode;
+  gameState.player = firstPlayer ? STATES.X : STATES.O;
   gameState.turn = STATES.X;
   gameState.state = GAME_STATES.CHOOSE_BOARD;
   gameState.board = buildInternalBoard();
@@ -248,8 +322,10 @@ const startGame = (playMode) => {
   gameState.completedCells = buildInternalOverallBoard(0);
   gameState.completedBoards = 0;
   gameState.canChooseBoard = true;
-  // Get the game box
+  gameState.movementChoseBoard = true;
+  // Get some of the game elements
   gameBox = document.getElementById(IDS.GAME_BOX);
+  turnCover = document.getElementById(IDS.TURN_COVER);
   // Switch turn to the current player, this will leave the player
   switchPlayerTurn(STATES.X);
   // Visually enable the game
@@ -261,9 +337,9 @@ const startGameLocal = () => {
   startGame(PLAY_MODE.LOCAL);
 };
 
-const startGameP2P = () => {
+const startGameP2P = (firstPlayer = false) => {
   // Start the game in P2P mode
-  startGame(PLAY_MODE.P2P);
+  startGame(PLAY_MODE.P2P, firstPlayer);
 };
 
 const endGame = (winner) => {
@@ -278,6 +354,24 @@ const endGame = (winner) => {
     endElem.children[0].innerHTML = 'There is no winner, it is a tie!';
   }
   endElem.classList.remove('hidden_ensure');
+};
+
+/* 
+------------------------------------------------------------------------------------------
+Game Lifecycle (Exposed)
+------------------------------------------------------------------------------------------
+*/
+const handleRemoteMovements = (movements) => {
+  movements.forEach((movement) => {
+    switch (movement.type) {
+      case GAME_STATES.CHOOSE_BOARD:
+        handleBoardClick(undefined, ...movement.coords, true);
+        break;
+      case GAME_STATES.CHOOSE_CELL:
+        handleCellClickWrapper(undefined, ...movement.coords, true);
+        break;
+    }
+  });
 };
 
 // Ensure to call functions as early as possible for experience

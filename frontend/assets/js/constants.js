@@ -1,17 +1,11 @@
-const SERVER_URI = 'tictactoe-server-geag7w45ea-ew.a.run.app';
-const SERVER_KEY = '8dd9b2075a04edc3c85aea8cc815ee93';
-const SERVER_CONNECTION = {
-  host: SERVER_URI,
-  port: 443,
-  ping: 1000 * 15, // 15s ping
-  secure: true,
-  debug: 3,
-  key: SERVER_KEY
-};
-// Timeout in seconds
-const SERVER_REFRESH_TIMEOUT = 60;
 // Generate the ID for the connection, once per load of the tab
-const UUID = crypto.randomUUID();
+const UUID = window.crypto.randomUUID();
+
+/* 
+------------------------------------------------------------------------------------------
+CSS CLASSES AND IDS
+------------------------------------------------------------------------------------------
+*/
 // Some names of the classes
 const CLASSES = {
   HIDDEN_WHEN_NO_ID: 'hidden-when-no-id'
@@ -21,11 +15,22 @@ const IDS = {
   GAME_BOX: 'game-box',
   INSTRUCTIONS: 'game-instructions',
   COVER: 'game-cover',
+  TURN_COVER: 'turn-cover',
   PEER_INFO: 'peer-info',
   END_COVER: 'end-cover',
   WINNER: 'winner',
   SERVER_LIST: 'server-list'
 };
+// CSS Classes
+const CSS_CLASSES = {
+  ENSURE_HIDDEN: 'hidden_ensure'
+};
+
+/* 
+------------------------------------------------------------------------------------------
+GAME RELATED
+------------------------------------------------------------------------------------------
+*/
 // Cell states
 const STATES = {
   EMPTY: 'EMPTY',
@@ -91,8 +96,33 @@ const PLAY_MODE = {
   LOCAL: 'LOCAL',
   P2P: 'P2P'
 };
-// Tempalte to send messages for the server
+
+/* 
+------------------------------------------------------------------------------------------
+Server
+------------------------------------------------------------------------------------------
+*/
+// Template to send messages for the server
 const SERVER_MESSAGE_TEMPLATE = {
   data: {},
   status: 200
 };
+// Server message types
+const SERVER_MESSAGE_NUMBERS = {
+  REJECTED: 400,
+  ACCEPTED: 200,
+  NEW_MOVE: 250
+};
+// Server connection information
+const SERVER_URI = 'tictactoe-server-geag7w45ea-ew.a.run.app';
+const SERVER_KEY = '8dd9b2075a04edc3c85aea8cc815ee93';
+const SERVER_CONNECTION = {
+  host: SERVER_URI,
+  port: 443,
+  ping: 1000 * 15, // 15s ping
+  secure: true,
+  debug: 3,
+  key: SERVER_KEY
+};
+// Timeout in seconds
+const SERVER_REFRESH_TIMEOUT = 60;

@@ -183,3 +183,10 @@ terraform.rc
 .DS_Store
 
 .DS_Store
+
+# START FRONTEND
+
+frontend/secure
+!frontend/secure/.gitkeep
+
+# END FRONTEND

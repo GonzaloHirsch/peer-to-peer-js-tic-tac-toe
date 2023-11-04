@@ -109,7 +109,7 @@ const rejectNewConnection = (conn) => {
   // Wait until this new connection is created to send the rejection, then close it.
   conn.on('open', () => {
     sendMessage(
-      400,
+      SERVER_MESSAGE_NUMBERS.REJECTED,
       {
         message: 'This peer is already on a match.'
       },
@@ -149,29 +149,39 @@ const setConnecteeConnectionListeners = (conn) => {
   connection.on('open', () => {
     // Send the match accepted data
     console.log("SEND ACCEPTH", Date.now());
-    //setTimeout(() => , 5000);
-    sendMessage(200, { message: 'Match accepted!' })
+    sendMessage(SERVER_MESSAGE_NUMBERS.ACCEPTED, { message: 'Match accepted!' });
+    // Start the game on the connectee, start as the second player
+    startGameP2P(false);
   });
 };
 
 const handleDataReceived = (data) => {
   console.log("DATA RECV", Date.now());
   payload = JSON.parse(data);
-  console.log(`Received ${payload}`);
+  console.log(`Received ${JSON.stringify(payload)}`);
   // Handle different use cases
   switch (payload.status) {
     // Player rejected because of another connection
-    case 400:
-      console.log(payload.data.message);
+    case SERVER_MESSAGE_NUMBERS.REJECTED:
+      // Close the connection on the
+      connection.close();
       break;
-    case 200:
-      console.log(payload.data.message);
+    // Match accepted, start the game as the first player
+    case SERVER_MESSAGE_NUMBERS.ACCEPTED:
+      startGameP2P(true);
       break;
-    default:
+    // New Movement
+    case SERVER_MESSAGE_NUMBERS.NEW_MOVE:
+      handleRemoteMovements(payload.data?.movements || []);
       break;
   }
-}
+};
 
+/* 
+------------------------------------------------------------------------------------------
+Messages and Signaling
+------------------------------------------------------------------------------------------
+*/
 const sendMessage = (status, payload, conn = undefined) => {
   console.log("SENDING MESSAGE ", Date.now());
   (conn ? conn : connection).send(
@@ -181,4 +191,8 @@ const sendMessage = (status, payload, conn = undefined) => {
       data: payload
     })
   );
+};
+
+const sendMovement = (payload) => {
+  sendMessage(SERVER_MESSAGE_NUMBERS.NEW_MOVE, payload);
 };

@@ -38,6 +38,27 @@ Instructions
   margin: 1rem;
 }
 
+.turn_cover {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  color: black !important;
+  font-size: x-large;
+}
+
+.turn_cover * {
+  color: white !important;
+  width: 85%;
+  margin: 0 auto 0 auto;
+  line-height: 1.25;
+}
+
 /* 
 ------------------------------------------------------------------------------------------
 Play Bounds 
