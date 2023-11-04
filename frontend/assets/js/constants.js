@@ -8,6 +8,8 @@ const SERVER_CONNECTION = {
   debug: 3,
   key: SERVER_KEY
 };
+// Timeout in seconds
+const SERVER_REFRESH_TIMEOUT = 60;
 // Generate the ID for the connection, once per load of the tab
 const UUID = crypto.randomUUID();
 // Some names of the classes

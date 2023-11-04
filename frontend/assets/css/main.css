@@ -217,6 +217,7 @@ Server List
   flex-direction: column;
   border: 0.25rem solid black;
   border-radius: 5px;
+  position: relative;
 }
 
 @media only screen and (min-width: 500px) {
@@ -231,7 +232,7 @@ Server List
   }
 }
 
-.server_list button {
+.server_list button:not(.refresh) {
   font-size: large;
   padding: 1rem 0.5rem;
   cursor: pointer;
@@ -240,12 +241,31 @@ Server List
     color ease 0.2s;
 }
 
+.server_list button.refresh {
+  font-size: medium;
+  position: sticky;
+  top: 0;
+  right: 0;
+  transition:
+    background-color ease 0.2s,
+    color ease 0.2s;
+  padding: 0.5rem 0.25rem;
+  border-bottom: 0.125rem solid black;
+  border-radius: 0 0 5px 5px;
+}
+
 .server_list div {
   font-size: large;
   padding: 1rem 0.5rem;
 }
 
-.server_list button:hover {
+.server_list button:not(.refresh):hover {
   background-color: rgba(31, 41, 55, 0.85);
   color: white;
+}
+
+.server_list button:not(.disabled):hover {
+  background-color: rgba(31, 41, 55);
+  color: white;
+  cursor: pointer;
 }

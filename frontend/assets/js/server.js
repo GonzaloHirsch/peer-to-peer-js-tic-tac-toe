@@ -33,10 +33,7 @@ const startServerConnection = () => {
     // Show the peer info
     hiddenElems.forEach((elem) => elem.classList.remove('hidden'));
     // Disable instructions, show the server selection list
-    getListOfServers().then(() => {
-      // Show the server selection screen
-      showListOfServers();
-    });
+    getAndShowListOfServers(false);
   });
   // Establish listener for the connection
   peer.on('connection', (conn) => {
@@ -45,13 +42,31 @@ const startServerConnection = () => {
   });
 };
 
-const showListOfServers = () => {
+const showListOfServers = (isRefresh = false) => {
   const serverListElem = document.getElementById(IDS.SERVER_LIST);
   // Show the server selection screen
   serverListElem.classList.remove('hidden_ensure');
-  // Remove the current servers
-  serverListElem.innerHTML = '';
+  // Remove all children
+  while (serverListElem.firstChild) {
+    serverListElem.removeChild(serverListElem.firstChild);
+  }
   let serverItem;
+  // Create a refresh element as the first one
+  const refreshElem = document.createElement('button');
+  refreshElem.innerHTML = 'Refresh List';
+  refreshElem.setAttribute('onclick', `getAndShowListOfServers(true)`);
+  refreshElem.classList.add('refresh');
+  serverListElem.appendChild(refreshElem);
+  // If it is a refresh, must disable it for some timeout
+  if (isRefresh) {
+    refreshElem.setAttribute('disabled', 'true');
+    refreshElem.classList.add('disabled');
+    // Timeout helps limit the number of requests to the server
+    setTimeout(() => {
+      refreshElem.removeAttribute('disabled');
+      refreshElem.classList.remove('disabled');
+    }, SERVER_REFRESH_TIMEOUT * 1000);
+  }
   // Show servers only if there are enough
   if (serverList.length > 1) {
     // Add the current list
@@ -59,7 +74,6 @@ const showListOfServers = () => {
       if (server !== UUID) {
         serverItem = document.createElement('button');
         serverItem.innerHTML = `${server}`;
-        //serverItem.setAttribute('disabled', `false`);
         serverItem.setAttribute('onclick', `handleSelectServer('${server}')`);
         serverListElem.appendChild(serverItem);
       }
@@ -74,12 +88,10 @@ const showListOfServers = () => {
   }
 };
 
-const handleListPeers = () => {
-  axios({
-    method: 'get',
-    url: `https://${SERVER_URI}/peerjs/peers`
-  }).then((response) => {
-    console.log(response.data);
+const getAndShowListOfServers = (isRefresh = false) => {
+  getListOfServers().then(() => {
+    // Show the server selection screen
+    showListOfServers(isRefresh);
   });
 };
 
@@ -90,36 +102,25 @@ const handleSelectServer = (peerId) => {
 };
 
 const rejectNewConnection = (conn) => {
-  // Close the connection if there's one already but send a message first
-  conn.send(
-    JSON.stringify({
-      ...SERVER_MESSAGE_TEMPLATE,
-      status: 400,
-      data: {
-        message: 'This peer is already on a match.'
-      }
-    })
+  // Just log out the error
+  console.error(
+    `Rejecting connection with ${conn.peer} because of an existing match with ${connection.peer}.`
   );
-  conn.close();
-};
-
-const setConnectorConnectionListeners = (conn) => {
-  // Ensure it only has 1 connection
-  if (connection) {
-    rejectNewConnection(conn);
-    return;
-  }
-  connection = conn;
-  // Make sure connection is successful
-  // Make sure the connection is usable
-  connection.on('open', () => {
-    console.log("OPEN CONN");
-    // Receive messages
-    connection.on('data', (data) => handleDataReceived(data));
+  // Wait until this new connection is created to send the rejection, then close it.
+  conn.on('open', () => {
+    sendMessage(
+      400,
+      {
+        message: 'This peer is already on a match.'
+      },
+      conn
+    );
+    conn.close();
   });
 };
 
-const setConnecteeConnectionListeners = (conn) => {
+const setConnectorConnectionListeners = (conn) => {
+  console.log("SET CONNECTOR LIST", Date.now());
   // Ensure it only has 1 connection
   if (connection) {
     rejectNewConnection(conn);
@@ -128,9 +129,33 @@ const setConnecteeConnectionListeners = (conn) => {
   connection = conn;
   // Make sure connection is successful
   connection.on('data', (data) => handleDataReceived(data));
+  // Make sure the connection is usable
+  connection.on('open', () => {
+    console.log("OPEN CONN", Date.now());
+    // Receive messages
+  });
+};
+
+const setConnecteeConnectionListeners = (conn) => {
+  console.log("SET CONNECTEE LIST", Date.now());
+  // Ensure it only has 1 connection
+  if (connection) {
+    rejectNewConnection(conn);
+    return;
+  }
+  connection = conn;
+  // Make sure connection is successful
+  connection.on('data', (data) => handleDataReceived(data));
+  connection.on('open', () => {
+    // Send the match accepted data
+    console.log("SEND ACCEPTH", Date.now());
+    //setTimeout(() => , 5000);
+    sendMessage(200, { message: 'Match accepted!' })
+  });
 };
 
 const handleDataReceived = (data) => {
+  console.log("DATA RECV", Date.now());
   payload = JSON.parse(data);
   console.log(`Received ${payload}`);
   // Handle different use cases
@@ -146,3 +171,14 @@ const handleDataReceived = (data) => {
       break;
   }
 }
+
+const sendMessage = (status, payload, conn = undefined) => {
+  console.log("SENDING MESSAGE ", Date.now());
+  (conn ? conn : connection).send(
+    JSON.stringify({
+      ...SERVER_MESSAGE_TEMPLATE,
+      status: status,
+      data: payload
+    })
+  );
+};
