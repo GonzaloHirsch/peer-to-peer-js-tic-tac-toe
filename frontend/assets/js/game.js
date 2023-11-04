@@ -137,9 +137,19 @@ const handleCellClick = (
     boardY !== gameState.selectedBoardY
   )
     return false;
+  // Visually mark the element as the previous selection
+  if (gameState.previousSelection) {
+    // Remove the marking for previous selection
+    gameState.previousSelection.classList.remove(
+      CSS_CLASSES.PREVIOUS_SELECTION
+    );
+  }
+  // Store the new previous selection
+  gameState.previousSelection = elem;
   // Make the necessary state changes
   elem.setAttribute('state', gameState.turn);
   elem.setAttribute('disabled', 'true');
+  elem.classList.add(CSS_CLASSES.PREVIOUS_SELECTION);
   // Update the internal state
   gameState.board[boardX][boardY][cellX][cellY] = gameState.turn;
   gameState.movementChoseBoard = gameState.canChooseBoard;
@@ -238,7 +248,8 @@ const getOppositeState = (currState) => {
   return currState === STATES.X ? STATES.O : STATES.X;
 };
 
-const isPlayerTurn = () => gameState.turn === gameState.player;
+const isPlayerTurn = () =>
+  gameState.playMode === PLAY_MODE.LOCAL || gameState.turn === gameState.player;
 
 const getBoardId = (x, y) => `board_${x}_${y}`;
 const getCellId = (bx, by, cx, cy) => `cell_${bx}_${by}_${cx}_${cy}`;
@@ -334,7 +345,7 @@ const startGame = (playMode, firstPlayer) => {
 
 const startGameLocal = () => {
   // Start the game locally
-  startGame(PLAY_MODE.LOCAL);
+  startGame(PLAY_MODE.LOCAL, true);
 };
 
 const startGameP2P = (firstPlayer = false) => {
@@ -345,7 +356,6 @@ const startGameP2P = (firstPlayer = false) => {
 const endGame = (winner) => {
   const endElem = document.getElementById(IDS.END_COVER);
   // Ensure there is a winner
-  // TODO, handle no winner
   if (winner !== STATES.TIE) {
     endElem.children[0].innerHTML = `The winner is: <span id="winner"></span>`;
     const winnerElem = document.getElementById(IDS.WINNER);
@@ -353,7 +363,8 @@ const endGame = (winner) => {
   } else {
     endElem.children[0].innerHTML = 'There is no winner, it is a tie!';
   }
-  endElem.classList.remove('hidden_ensure');
+  turnCover.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
+  endElem.classList.remove(CSS_CLASSES.ENSURE_HIDDEN);
 };
 
 /* 

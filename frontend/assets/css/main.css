@@ -207,7 +207,7 @@ Server List
 ------------------------------------------------------------------------------------------
 */
 .server_list {
-  overflow-y: scroll;
+  overflow-y: auto;
   width: 270px;
   max-height: 200px;
   margin-left: auto;

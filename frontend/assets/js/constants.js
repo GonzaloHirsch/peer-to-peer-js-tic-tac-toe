@@ -23,7 +23,8 @@ const IDS = {
 };
 // CSS Classes
 const CSS_CLASSES = {
-  ENSURE_HIDDEN: 'hidden_ensure'
+  ENSURE_HIDDEN: 'hidden_ensure',
+  PREVIOUS_SELECTION: 'previous_selection'
 };
 
 /* 

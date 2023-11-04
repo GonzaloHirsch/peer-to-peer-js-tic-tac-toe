@@ -163,7 +163,7 @@ const handleDataReceived = (data) => {
   switch (payload.status) {
     // Player rejected because of another connection
     case SERVER_MESSAGE_NUMBERS.REJECTED:
-      // Close the connection on the
+      // Close the connection on this side
       connection.close();
       break;
     // Match accepted, start the game as the first player
