@@ -4,15 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>P2P (SUPER) Tic Tac Toe | Gonzalo Hirsch</title>
+    <meta name="custom_share" content="Are you down to play some (SUPER) Tic Tac Toe?">
+    <meta name="custom_share_peer" content="My peer ID is">
     <link rel="icon" type="image/png" href="./favicon.png">
 </head>
 
 <body>
     <h1 id="title" class="heading h1 text_center">Peer to Peer <br><em>(SUPER)</em> Tic Tac Toe
     </h1>
-    <h2 class="heading h2 text_center italic text_xlarge" style="margin-top: .5rem;">By <a
+    <h2 class="heading h2 text_center italic text_xlarge" style="padding-top: .25rem;">By <a
             href="https://gonzalohirsch.com/" target="_blank" rel="noopener">Gonzalo Hirsch</a></h2>
-    <div id="play-screen" class="play_screen mx_auto" style="margin-top: 2rem;">
+    <div id="play-screen" class="play_screen mx_auto">
         <div id="server-select" class="hidden">
 
         </div>
@@ -81,22 +83,46 @@
     <p>If you can select the mini-board to play next, you can change your choice before clicking on one of the cells.
     </p>
     <h3>Share</h3>
-    <div class="share-controls">
-        <div class="share-buttons">
-            <a href="https://twitter.com/intent/tweet?text=Are you down to play some Super Tic Tac Toe" target="_blank"
-                rel="noopener noreferrer"></a>
-            <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button"
-                data-text="Check out this ASCII video generator from Gonzalo Hirsch."
-                data-url="https://tictactoe.gonzalohirsch.com" data-show-count="false">Tweet</a>
-            <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-            <iframe
-                src="https://www.facebook.com/plugins/share_button.php?href=https%3A%2F%2Ftictactoe.gonzalohirsch.com&layout=button&size=small&appId=400525667891154&width=67&height=20"
-                width="67" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0"
-                allowfullscreen="true"
-                allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
-            <script type="IN/Share" data-url="https://tictactoe.gonzalohirsch.com"></script>
-        </div>
-    </div>
+    <ul class="share-buttons">
+        <li><a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ftictactoe.gonzalohirsch.com%2F&quote="
+                target="_blank" title="Share on Facebook"
+                onclick="var selector = `meta[name='custom_share']`; window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(document.URL) + '&quote=' + encodeURIComponent(document.URL)); return false;"><i
+                    class="fab fa-facebook-square fa-2x" aria-hidden="true"></i><span class="sr-only">Share on
+                    Facebook</span></a></li>
+        <li><a href="https://twitter.com/intent/tweet?source=https%3A%2F%2Ftictactoe.gonzalohirsch.com%2F&text=:%20https%3A%2F%2Ftictactoe.gonzalohirsch.com%2F&via=GonzaloHirsch"
+                target="_blank" title="Tweet"
+                onclick="var selector = `meta[name='custom_share']`; var selector_peer = `meta[name='custom_share_peer']`; window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(document.querySelector(selector).content) + '%20' + encodeURIComponent(document.querySelector(selector_peer).content) + '%20' + encodeURIComponent(UUID) + '%0A' + encodeURIComponent(document.URL)); return false;"><i
+                    class="fab fa-twitter-square fa-2x" aria-hidden="true"></i><span class="sr-only">Tweet</span></a>
+        </li>
+        <li><a href="http://www.tumblr.com/share?v=3&u=https%3A%2F%2Ftictactoe.gonzalohirsch.com%2F&quote=&s="
+                target="_blank" title="Post to Tumblr"
+                onclick="var selector = `meta[name='custom_share']`; window.open('http://www.tumblr.com/share?v=3&u=' + encodeURIComponent(document.URL) + '&quote=' +  encodeURIComponent(document.querySelector(selector).content)); return false;"><i
+                    class="fab fa-tumblr-square fa-2x" aria-hidden="true"></i><span class="sr-only">Post to
+                    Tumblr</span></a></li>
+        <li><a href="http://pinterest.com/pin/create/button/?url=https%3A%2F%2Ftictactoe.gonzalohirsch.com%2F&description="
+                target="_blank" title="Pin it"
+                onclick="var selector = `meta[name='custom_share']`; window.open('http://pinterest.com/pin/create/button/?url=' + encodeURIComponent(document.URL) + '&description=' +  encodeURIComponent(document.querySelector(selector).content)); return false;"><i
+                    class="fab fa-pinterest-square fa-2x" aria-hidden="true"></i><span class="sr-only">Pin
+                    it</span></a>
+        </li>
+        <li><a href="http://www.reddit.com/submit?url=https%3A%2F%2Ftictactoe.gonzalohirsch.com%2F&title="
+                target="_blank" title="Submit to Reddit"
+                onclick="var selector = `meta[name='custom_share']`; window.open('http://www.reddit.com/submit?url=' + encodeURIComponent(document.URL) + '&title=' +  encodeURIComponent(document.querySelector(selector).content)); return false;"><i
+                    class="fab fa-reddit-square fa-2x" aria-hidden="true"></i><span class="sr-only">Submit to
+                    Reddit</span></a></li>
+        <li><a href="http://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Ftictactoe.gonzalohirsch.com%2F&title=&summary=&source=https%3A%2F%2Ftictactoe.gonzalohirsch.com%2F"
+                target="_blank" title="Share on LinkedIn"
+                onclick="var selector = `meta[name='custom_share']`; window.open('http://www.linkedin.com/shareArticle?mini=true&url=' + encodeURIComponent(document.URL) + '&title=' +  encodeURIComponent(document.querySelector(selector).content)); return false;"><i
+                    class="fab fa-linkedin fa-2x" aria-hidden="true"></i><span class="sr-only">Share on
+                    LinkedIn</span></a>
+        </li>
+        <li><a href="mailto:?subject=&body=:%20https%3A%2F%2Ftictactoe.gonzalohirsch.com%2F" target="_blank"
+                title="Send email"
+                onclick="var selector = `meta[name='custom_share']`; window.open('mailto:?subject=' + encodeURIComponent(document.querySelector(selector).content) + '&body=' +  encodeURIComponent(document.URL)); return false;"><i
+                    class="fas fa-envelope-square fa-2x" aria-hidden="true"></i><span class="sr-only">Send
+                    email</span></a>
+        </li>
+    </ul>
     <!-- CSS -->
     <link async rel="stylesheet" href="./assets/css/main.css">
     <link async rel="stylesheet" href="./assets/css/game.css">
@@ -106,6 +132,9 @@
     <script src="./assets/js/constants.js"></script>
     <script src="./assets/js/game.js"></script>
     <script src="./assets/js/server.js"></script>
+    <!-- Non Critical CSS -->
+    <link async rel="stylesheet" href="./assets/css/share.css">
+    <link async href="https://use.fontawesome.com/releases/v5.10.2/css/all.css" rel="stylesheet">
 </body>
 
 </html>
