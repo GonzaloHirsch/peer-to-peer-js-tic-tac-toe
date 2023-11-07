@@ -47,9 +47,7 @@ const showListOfServers = (isRefresh = false) => {
   // Show the server selection screen
   serverListElem.classList.remove('hidden_ensure');
   // Remove all children
-  while (serverListElem.firstChild) {
-    serverListElem.removeChild(serverListElem.firstChild);
-  }
+  clearChildren(serverListElem);
   let serverItem;
   // Create a refresh element as the first one
   const refreshElem = document.createElement('button');

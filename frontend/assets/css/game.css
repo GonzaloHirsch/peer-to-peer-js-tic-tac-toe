@@ -18,14 +18,21 @@ Instructions
   font-size: x-large;
 }
 
-.game_cover *,
-.end_cover * {
+.game_cover p,
+.game_cover span,
+.end_cover p,
+.end_cover span {
   color: white !important;
   width: 85%;
   margin: 0 auto 0 auto;
   line-height: 1.25;
 }
 
+/* 
+------------------------------------------------------------------------------------------
+Game Options
+------------------------------------------------------------------------------------------
+*/
 .game_options {
   display: flex;
   flex-direction: row;
@@ -38,6 +45,11 @@ Instructions
   margin: 1rem;
 }
 
+/* 
+------------------------------------------------------------------------------------------
+Turn Cover
+------------------------------------------------------------------------------------------
+*/
 .turn_cover {
   position: absolute;
   top: 0;
@@ -57,6 +69,32 @@ Instructions
   width: 85%;
   margin: 0 auto 0 auto;
   line-height: 1.25;
+}
+
+/* 
+------------------------------------------------------------------------------------------
+End Cover & Rematch
+------------------------------------------------------------------------------------------
+*/
+.end_cover .rematch_button {
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  border: 0.25rem solid rgb(31, 41, 55);
+  background-color: white;
+  cursor: pointer;
+  opacity: 1;
+  border-radius: 5px;
+  font-size: large;
+  transition:
+    background-color ease 0.2s,
+    color ease 0.2s;
+  color: rgb(31, 41, 55);
+  margin-top: 1rem;
+  width: fit-content;
+  margin: 1rem auto 0 auto;
+}
+
+.end_cover .rematch_button:hover {
+  background-color: rgb(189, 189, 189);
 }
 
 /* 

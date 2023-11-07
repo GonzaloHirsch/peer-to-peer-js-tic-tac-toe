@@ -216,6 +216,14 @@ const handleBoardClick = (e, x, y, removeMovement = false) => {
   gameBox.setAttribute('state', gameState.state);
 };
 
+const handleRematch = (e, playMode) => {
+  // If the rematch is local, just restart the game
+  if (playMode === PLAY_MODE.LOCAL) {
+    startGameLocal();
+    return;
+  }
+};
+
 /* 
 ------------------------------------------------------------------------------------------
 Utilities
@@ -311,6 +319,8 @@ const updateBoardWithWinner = (x, y, winner) => {
 const enableGameVisually = () => {
   const cover = document.getElementById(IDS.COVER);
   cover.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
+  turnCover.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
+  endCover.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
 };
 
 /* 
@@ -337,6 +347,7 @@ const startGame = (playMode, firstPlayer) => {
   // Get some of the game elements
   gameBox = document.getElementById(IDS.GAME_BOX);
   turnCover = document.getElementById(IDS.TURN_COVER);
+  endCover = document.getElementById(IDS.END_COVER);
   // Switch turn to the current player, this will leave the player
   switchPlayerTurn(STATES.X);
   // Visually enable the game
@@ -355,14 +366,28 @@ const startGameP2P = (firstPlayer = false) => {
 
 const endGame = (winner) => {
   const endElem = document.getElementById(IDS.END_COVER);
+  // Clear children
+  clearChildren(endElem);
+  const winnerP = document.createElement('p');
   // Ensure there is a winner
   if (winner !== STATES.TIE) {
-    endElem.children[0].innerHTML = `The winner is: <span id="winner"></span>`;
-    const winnerElem = document.getElementById(IDS.WINNER);
-    winnerElem.innerHTML = winner;
+    winnerP.innerHTML = `The winner is: <span id="winner">${winner}</span>`;
   } else {
-    endElem.children[0].innerHTML = 'There is no winner, it is a tie!';
+    winnerP.innerHTML = 'There is no winner, it is a tie!';
   }
+  // Add the winner P to the element
+  endElem.appendChild(winnerP);
+  // Propose a rematch
+  const rematchButton = document.createElement('button');
+  rematchButton.innerHTML = 'Rematch!';
+  rematchButton.setAttribute(
+    'onclick',
+    `handleRematch(event, '${gameState.playMode}')`
+  );
+  rematchButton.classList.add('rematch_button');
+  // Add the button to the end elem
+  endElem.appendChild(rematchButton);
+  // Show the other classes
   turnCover.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
   endElem.classList.remove(CSS_CLASSES.ENSURE_HIDDEN);
 };
