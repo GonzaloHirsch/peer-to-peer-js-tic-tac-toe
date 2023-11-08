@@ -19,6 +19,13 @@ const getListOfServers = () => {
 };
 
 const startServerConnection = () => {
+  // Ensure there is no duplicate peer
+  if (peer) {
+    console.error(
+      'Connection with source server already present, will not connect twice.'
+    );
+    return;
+  }
   // Get the element to notify the user
   const hiddenElems = document.querySelectorAll(
     `.${CLASSES.HIDDEN_WHEN_NO_ID}`
@@ -37,11 +44,27 @@ const startServerConnection = () => {
   });
   // Establish listener for the connection
   peer.on('connection', (conn) => {
-    console.log("CONNECTION RECEIVED");
     setConnecteeConnectionListeners(conn);
   });
 };
 
+/**
+ * Closes the connection to the server, if present.
+ * @returns nothing
+ */
+const closeServerConnection = () => {
+  // Do nothing if no peer
+  if (!peer) return;
+  // Destroy the peer for cleanup
+  peer.destroy();
+  peer = undefined;
+};
+
+/* 
+------------------------------------------------------------------------------------------
+Server Listing
+------------------------------------------------------------------------------------------
+*/
 const showListOfServers = (isRefresh = false) => {
   const serverListElem = document.getElementById(IDS.SERVER_LIST);
   // Show the server selection screen
@@ -94,31 +117,16 @@ const getAndShowListOfServers = (isRefresh = false) => {
 };
 
 const handleSelectServer = (peerId) => {
-  console.log('TRYING TO CONNECT');
   // Connection in case I'm the one creating it
   setConnectorConnectionListeners(peer.connect(peerId));
 };
 
-const rejectNewConnection = (conn) => {
-  // Just log out the error
-  console.error(
-    `Rejecting connection with ${conn.peer} because of an existing match with ${connection.peer}.`
-  );
-  // Wait until this new connection is created to send the rejection, then close it.
-  conn.on('open', () => {
-    sendMessage(
-      SERVER_MESSAGE_NUMBERS.REJECTED,
-      {
-        message: 'This peer is already on a match.'
-      },
-      conn
-    );
-    conn.close();
-  });
-};
-
+/* 
+------------------------------------------------------------------------------------------
+Connection Listeners
+------------------------------------------------------------------------------------------
+*/
 const setConnectorConnectionListeners = (conn) => {
-  console.log("SET CONNECTOR LIST", Date.now());
   // Ensure it only has 1 connection
   if (connection) {
     rejectNewConnection(conn);
@@ -129,7 +137,6 @@ const setConnectorConnectionListeners = (conn) => {
   connection.on('data', (data) => handleDataReceived(data));
   // Make sure the connection is usable
   connection.on('open', () => {
-    console.log("OPEN CONN", Date.now());
     // Receive messages
   });
   // Ensure connection is closed from both ends
@@ -140,7 +147,6 @@ const setConnectorConnectionListeners = (conn) => {
 };
 
 const setConnecteeConnectionListeners = (conn) => {
-  console.log("SET CONNECTEE LIST", Date.now());
   // Ensure it only has 1 connection
   if (connection) {
     rejectNewConnection(conn);
@@ -151,8 +157,9 @@ const setConnecteeConnectionListeners = (conn) => {
   connection.on('data', (data) => handleDataReceived(data));
   connection.on('open', () => {
     // Send the match accepted data
-    console.log("SEND ACCEPTH", Date.now());
-    sendMessage(SERVER_MESSAGE_NUMBERS.ACCEPTED, { message: 'Match accepted!' });
+    sendMessage(SERVER_MESSAGE_NUMBERS.ACCEPTED, {
+      message: 'Match accepted!'
+    });
     // Start the game on the connectee, start as the second player
     startGameP2P(false);
   });
@@ -163,8 +170,12 @@ const setConnecteeConnectionListeners = (conn) => {
   });
 };
 
+/* 
+------------------------------------------------------------------------------------------
+Main Handler
+------------------------------------------------------------------------------------------
+*/
 const handleDataReceived = (data) => {
-  console.log("DATA RECV", Date.now());
   payload = JSON.parse(data);
   console.log(`Received ${JSON.stringify(payload)}`);
   // Handle different use cases
@@ -204,6 +215,25 @@ const handleDataReceived = (data) => {
 Messages and Signaling
 ------------------------------------------------------------------------------------------
 */
+
+const rejectNewConnection = (conn) => {
+  // Just log out the error
+  console.error(
+    `Rejecting connection with ${conn.peer} because of an existing match with ${connection.peer}.`
+  );
+  // Wait until this new connection is created to send the rejection, then close it.
+  conn.on('open', () => {
+    sendMessage(
+      SERVER_MESSAGE_NUMBERS.REJECTED,
+      {
+        message: 'This peer is already on a match.'
+      },
+      conn
+    );
+    conn.close();
+  });
+};
+
 const sendMessage = (status, payload, conn = undefined) => {
   (conn ? conn : connection).send(
     JSON.stringify({

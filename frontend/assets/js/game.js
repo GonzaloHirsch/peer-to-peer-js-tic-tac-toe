@@ -225,6 +225,11 @@ Rematch
 ------------------------------------------------------------------------------------------
 */
 const handleRematch = (e) => {
+  // Ensure there is a winner.
+  if (!gameState.winner) {
+    console.error('There is no winner, hence there cannot be a rematch');
+    return;
+  }
   // If the rematch is local, just restart the game
   if (gameState.playMode === PLAY_MODE.LOCAL) {
     startGameLocal();
@@ -244,20 +249,25 @@ const handleRematch = (e) => {
 };
 
 const handleRematchRequest = (message) => {
-  console.log("REMATCH");
+  // Ensure there is a winner.
+  if (!gameState.winner) {
+    console.error('There is no winner, hence there cannot be a rematch');
+    return;
+  }
   // Show the message
   setupEndgameText(message);
   // Hide the rematch button.
-  console.log(rematchButton.classList);
   rematchButton.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
-  console.log(rematchButton.classList, rematchButton);
   // Show the other buttons
-  console.log(rematchOptionButtons.classList);
   rematchOptionButtons.classList.remove(CSS_CLASSES.ENSURE_HIDDEN);
-  console.log(rematchOptionButtons.classList, rematchOptionButtons);
 };
 
 const handleRematchResponse = (accept) => {
+  // Ensure there is a winner.
+  if (!gameState.winner) {
+    console.error('There is no winner, hence there cannot be a rematch');
+    return;
+  }
   // Hide the buttons
   rematchOptionButtons.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
   if (accept) {
@@ -404,6 +414,7 @@ const startGame = (playMode, firstPlayer) => {
   gameState.completedBoards = 0;
   gameState.canChooseBoard = true;
   gameState.movementChoseBoard = true;
+  gameState.winner = undefined;
   // Get some of the game elements
   gameBox = document.getElementById(IDS.GAME_BOX);
   turnCover = document.getElementById(IDS.TURN_COVER);
@@ -419,6 +430,8 @@ const startGame = (playMode, firstPlayer) => {
 const startGameLocal = () => {
   // Start the game locally
   startGame(PLAY_MODE.LOCAL, true);
+  // Ensure to close the server connection to prevent resource consumption
+  closeServerConnection();
 };
 
 const startGameP2P = (firstPlayer = false) => {
@@ -433,6 +446,7 @@ const endGame = (winner) => {
       ? `The winner is: <span id="winner">${winner}</span>`
       : 'There is no winner, it is a tie!'
   );
+  gameState.winner = winner;
   // Propose a rematch
   rematchButton.classList.remove(CSS_CLASSES.ENSURE_HIDDEN);
   // Show the other classes
