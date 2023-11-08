@@ -46,6 +46,14 @@ const startServerConnection = () => {
   peer.on('connection', (conn) => {
     setConnecteeConnectionListeners(conn);
   });
+  // Handle errors more gracefully
+  peer.on('error', (error) => {
+    console.error(`Error in the peer. Error type ${error.type}`);
+    console.error(error);
+    setCoverMessage(
+      `Error connecting to opponent. Try refreshing the list of peers. ${MESSAGES.INSTRUCTIONS} (error code '${error.type}')`
+    );
+  });
 };
 
 /**
@@ -141,8 +149,15 @@ const setConnectorConnectionListeners = (conn) => {
   });
   // Ensure connection is closed from both ends
   connection.on('close', () => {
+    console.warn(
+      'Closing connection because a close event was received from the other end.'
+    );
     connection.close();
     connection = undefined;
+  });
+  // Ensure correct signaling for errors
+  connection.on('error', () => {
+    console.log("SUPER ERROR")
   });
 };
 
@@ -235,6 +250,13 @@ const rejectNewConnection = (conn) => {
 };
 
 const sendMessage = (status, payload, conn = undefined) => {
+  // If no available connection, the connection was closed. Show that and close the connection
+  if (!(conn || connection)) {
+    setCoverMessage(`Match was closed by opponent. ${MESSAGES.INSTRUCTIONS}`);
+    setCoverStatus(true);
+    setTurnCoverStatus(false);
+    return;
+  }
   (conn ? conn : connection).send(
     JSON.stringify({
       ...SERVER_MESSAGE_TEMPLATE,

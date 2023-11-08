@@ -1,10 +1,11 @@
 // Local copy of the game state
 let gameState = {};
-let gameBox = undefined;
-let turnCover = undefined;
-let endCover = undefined;
-let rematchButton = undefined;
-let rematchOptionButtons = undefined;
+let cover = document.getElementById(IDS.COVER);
+let gameBox = document.getElementById(IDS.GAME_BOX);
+let turnCover = document.getElementById(IDS.TURN_COVER);
+let endCover = document.getElementById(IDS.END_COVER);
+let rematchButton = document.getElementById(IDS.REMATCH_BTN);
+let rematchOptionButtons = document.getElementById(IDS.END_REMATCH);
 
 /* 
 ------------------------------------------------------------------------------------------
@@ -384,13 +385,33 @@ const updateBoardWithWinner = (x, y, winner) => {
 };
 
 const enableGameVisually = () => {
-  const cover = document.getElementById(IDS.COVER);
   cover.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
   endCover.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
+  rematchButton.classList.remove(CSS_CLASSES.ENSURE_HIDDEN);
+  rematchOptionButtons.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
+  if (gameState.playMode !== PLAY_MODE.P2P) {
+    turnCover.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
+  }
 };
 
 const setupEndgameText = (content) => {
   endCover.firstElementChild.innerHTML = content;
+};
+
+const setCoverMessage = (content) => {
+  cover.firstElementChild.innerHTML = content;
+};
+
+const setCoverStatus = (enabled) => setElemStatus(enabled, cover);
+
+const setTurnCoverStatus = (enabled) => setElemStatus(enabled, turnCover);
+
+const setElemStatus = (enabled, elem) => {
+  if (enabled) {
+    elem.classList.remove(CSS_CLASSES.ENSURE_HIDDEN);
+  } else {
+    elem.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
+  }
 };
 
 /* 
@@ -415,12 +436,6 @@ const startGame = (playMode, firstPlayer) => {
   gameState.canChooseBoard = true;
   gameState.movementChoseBoard = true;
   gameState.winner = undefined;
-  // Get some of the game elements
-  gameBox = document.getElementById(IDS.GAME_BOX);
-  turnCover = document.getElementById(IDS.TURN_COVER);
-  endCover = document.getElementById(IDS.END_COVER);
-  rematchButton = document.getElementById(IDS.REMATCH_BTN);
-  rematchOptionButtons = document.getElementById(IDS.END_REMATCH);
   // Switch turn to the current player, this will leave the player
   switchPlayerTurn(STATES.X);
   // Visually enable the game
@@ -428,10 +443,10 @@ const startGame = (playMode, firstPlayer) => {
 };
 
 const startGameLocal = () => {
-  // Start the game locally
-  startGame(PLAY_MODE.LOCAL, true);
   // Ensure to close the server connection to prevent resource consumption
   closeServerConnection();
+  // Start the game locally
+  startGame(PLAY_MODE.LOCAL, true);
 };
 
 const startGameP2P = (firstPlayer = false) => {
