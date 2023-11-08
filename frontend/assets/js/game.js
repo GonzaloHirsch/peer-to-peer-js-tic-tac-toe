@@ -2,6 +2,9 @@
 let gameState = {};
 let gameBox = undefined;
 let turnCover = undefined;
+let endCover = undefined;
+let rematchButton = undefined;
+let rematchOptionButtons = undefined;
 
 /* 
 ------------------------------------------------------------------------------------------
@@ -216,12 +219,66 @@ const handleBoardClick = (e, x, y, removeMovement = false) => {
   gameBox.setAttribute('state', gameState.state);
 };
 
-const handleRematch = (e, playMode) => {
+/* 
+------------------------------------------------------------------------------------------
+Rematch
+------------------------------------------------------------------------------------------
+*/
+const handleRematch = (e) => {
   // If the rematch is local, just restart the game
-  if (playMode === PLAY_MODE.LOCAL) {
+  if (gameState.playMode === PLAY_MODE.LOCAL) {
     startGameLocal();
     return;
   }
+  // If the rematch is remote, send a rematch request
+  if (gameState.playMode === PLAY_MODE.P2P) {
+    sendRematch();
+    // Show that rematch is sent
+    setupEndgameText(
+      'Sent rematch request to opponent, please wait for a response.'
+    );
+    // Hide the rematch button
+    rematchButton.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
+    return;
+  }
+};
+
+const handleRematchRequest = (message) => {
+  console.log("REMATCH");
+  // Show the message
+  setupEndgameText(message);
+  // Hide the rematch button.
+  console.log(rematchButton.classList);
+  rematchButton.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
+  console.log(rematchButton.classList, rematchButton);
+  // Show the other buttons
+  console.log(rematchOptionButtons.classList);
+  rematchOptionButtons.classList.remove(CSS_CLASSES.ENSURE_HIDDEN);
+  console.log(rematchOptionButtons.classList, rematchOptionButtons);
+};
+
+const handleRematchResponse = (accept) => {
+  // Hide the buttons
+  rematchOptionButtons.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
+  if (accept) {
+    // Restart game
+    startGameP2P(false);
+  } else {
+    // Show the message
+    setupEndgameText(`Rematch declined. ${MESSAGES.INSTRUCTIONS}`);
+  }
+  // Send response to server
+  respondToRematch(accept);
+};
+
+const handleRematchRemoteDecline = () => {
+  // Hide the buttons
+  rematchOptionButtons.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
+  rematchButton.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
+  // Show the message
+  setupEndgameText(
+    `Rematch was declined by opponent. ${MESSAGES.INSTRUCTIONS}`
+  );
 };
 
 /* 
@@ -241,10 +298,10 @@ const switchPlayerTurn = (nextState) => {
 };
 
 const switchPlayerTurnVisually = () => {
-  console.log(gameState.turn, gameState.player);
   // If it's the player turn, enable it for them
   if (gameState.playMode === PLAY_MODE.P2P) {
     if (isPlayerTurn()) {
+      console.log(gameState.playMode, gameState.turn, gameState.player);
       turnCover.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
     } else {
       turnCover.classList.remove(CSS_CLASSES.ENSURE_HIDDEN);
@@ -319,8 +376,11 @@ const updateBoardWithWinner = (x, y, winner) => {
 const enableGameVisually = () => {
   const cover = document.getElementById(IDS.COVER);
   cover.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
-  turnCover.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
   endCover.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
+};
+
+const setupEndgameText = (content) => {
+  endCover.firstElementChild.innerHTML = content;
 };
 
 /* 
@@ -348,6 +408,8 @@ const startGame = (playMode, firstPlayer) => {
   gameBox = document.getElementById(IDS.GAME_BOX);
   turnCover = document.getElementById(IDS.TURN_COVER);
   endCover = document.getElementById(IDS.END_COVER);
+  rematchButton = document.getElementById(IDS.REMATCH_BTN);
+  rematchOptionButtons = document.getElementById(IDS.END_REMATCH);
   // Switch turn to the current player, this will leave the player
   switchPlayerTurn(STATES.X);
   // Visually enable the game
@@ -365,31 +427,17 @@ const startGameP2P = (firstPlayer = false) => {
 };
 
 const endGame = (winner) => {
-  const endElem = document.getElementById(IDS.END_COVER);
-  // Clear children
-  clearChildren(endElem);
-  const winnerP = document.createElement('p');
-  // Ensure there is a winner
-  if (winner !== STATES.TIE) {
-    winnerP.innerHTML = `The winner is: <span id="winner">${winner}</span>`;
-  } else {
-    winnerP.innerHTML = 'There is no winner, it is a tie!';
-  }
-  // Add the winner P to the element
-  endElem.appendChild(winnerP);
-  // Propose a rematch
-  const rematchButton = document.createElement('button');
-  rematchButton.innerHTML = 'Rematch!';
-  rematchButton.setAttribute(
-    'onclick',
-    `handleRematch(event, '${gameState.playMode}')`
+  console.log(winner);
+  setupEndgameText(
+    winner !== STATES.TIE
+      ? `The winner is: <span id="winner">${winner}</span>`
+      : 'There is no winner, it is a tie!'
   );
-  rematchButton.classList.add('rematch_button');
-  // Add the button to the end elem
-  endElem.appendChild(rematchButton);
+  // Propose a rematch
+  rematchButton.classList.remove(CSS_CLASSES.ENSURE_HIDDEN);
   // Show the other classes
   turnCover.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
-  endElem.classList.remove(CSS_CLASSES.ENSURE_HIDDEN);
+  endCover.classList.remove(CSS_CLASSES.ENSURE_HIDDEN);
 };
 
 /* 

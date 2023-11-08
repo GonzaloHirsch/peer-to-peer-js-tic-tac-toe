@@ -19,7 +19,9 @@ const IDS = {
   PEER_INFO: 'peer-info',
   END_COVER: 'end-cover',
   WINNER: 'winner',
-  SERVER_LIST: 'server-list'
+  SERVER_LIST: 'server-list',
+  REMATCH_BTN: 'end-rematch-button',
+  END_REMATCH: 'end-rematch'
 };
 // CSS Classes
 const CSS_CLASSES = {
@@ -97,6 +99,10 @@ const PLAY_MODE = {
   LOCAL: 'LOCAL',
   P2P: 'P2P'
 };
+const MESSAGES = {
+  INSTRUCTIONS:
+    'Start the game by selecting which game mode you want. You can opt for local multiplayer or P2P. If you choose to play P2P, you need to select your opponent from the peer list.'
+};
 
 /* 
 ------------------------------------------------------------------------------------------
@@ -111,8 +117,11 @@ const SERVER_MESSAGE_TEMPLATE = {
 // Server message types
 const SERVER_MESSAGE_NUMBERS = {
   REJECTED: 400,
+  REMATCH_REJECTED: 401,
   ACCEPTED: 200,
-  NEW_MOVE: 250
+  REMATCH_ACCEPTED: 201,
+  NEW_MOVE: 250,
+  REMATCH: 300
 };
 // Server connection information
 const SERVER_URI = 'tictactoe-server-geag7w45ea-ew.a.run.app';

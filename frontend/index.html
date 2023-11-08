@@ -29,7 +29,12 @@
             <p>Waiting for the other player to make a move...</p>
         </div>
         <div id="end-cover" class="end_cover hidden_ensure">
-            <p>The winner is: <span id="winner"></span></p>
+            <p id="end-content">The winner is: <span id="winner"></span></p>
+            <button id="end-rematch-button" onclick="handleRematch(event)" class="rematch_button">Rematch!</button>
+            <div id="end-rematch" class="hidden_ensure">
+                <button onclick="handleRematchResponse(true)" class="rematch_button button_accept">Yes!</button>
+                <button onclick="handleRematchResponse(false)" class="rematch_button button_decline">No!</button>
+            </div>
         </div>
     </div>
     <div id="server-list" class="server_list hidden_ensure">

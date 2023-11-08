@@ -132,6 +132,11 @@ const setConnectorConnectionListeners = (conn) => {
     console.log("OPEN CONN", Date.now());
     // Receive messages
   });
+  // Ensure connection is closed from both ends
+  connection.on('close', () => {
+    connection.close();
+    connection = undefined;
+  });
 };
 
 const setConnecteeConnectionListeners = (conn) => {
@@ -151,6 +156,11 @@ const setConnecteeConnectionListeners = (conn) => {
     // Start the game on the connectee, start as the second player
     startGameP2P(false);
   });
+  // Ensure connection is closed from both ends
+  connection.on('close', () => {
+    connection.close();
+    connection = undefined;
+  });
 };
 
 const handleDataReceived = (data) => {
@@ -163,14 +173,28 @@ const handleDataReceived = (data) => {
     case SERVER_MESSAGE_NUMBERS.REJECTED:
       // Close the connection on this side
       connection.close();
+      connection = undefined;
       break;
-    // Match accepted, start the game as the first player
+    // Player rejected
+    case SERVER_MESSAGE_NUMBERS.REMATCH_REJECTED:
+      // Close the connection on this side
+      connection.close();
+      connection = undefined;
+      // Display the information that the player rejected it
+      handleRematchRemoteDecline();
+      break;
+    // Match/rematch accepted, start the game as the first player
     case SERVER_MESSAGE_NUMBERS.ACCEPTED:
+    case SERVER_MESSAGE_NUMBERS.REMATCH_ACCEPTED:
       startGameP2P(true);
       break;
     // New Movement
     case SERVER_MESSAGE_NUMBERS.NEW_MOVE:
       handleRemoteMovements(payload.data?.movements || []);
+      break;
+    // Rematch request
+    case SERVER_MESSAGE_NUMBERS.REMATCH:
+      handleRematchRequest(payload.data?.message || '');
       break;
   }
 };
@@ -181,7 +205,6 @@ Messages and Signaling
 ------------------------------------------------------------------------------------------
 */
 const sendMessage = (status, payload, conn = undefined) => {
-  console.log("SENDING MESSAGE ", Date.now());
   (conn ? conn : connection).send(
     JSON.stringify({
       ...SERVER_MESSAGE_TEMPLATE,
@@ -193,4 +216,21 @@ const sendMessage = (status, payload, conn = undefined) => {
 
 const sendMovement = (payload) => {
   sendMessage(SERVER_MESSAGE_NUMBERS.NEW_MOVE, payload);
+};
+
+const sendRematch = () => {
+  sendMessage(SERVER_MESSAGE_NUMBERS.REMATCH, {
+    message: 'Fancy a rematch?'
+  });
+};
+
+const respondToRematch = (accept) => {
+  sendMessage(
+    accept
+      ? SERVER_MESSAGE_NUMBERS.REMATCH_ACCEPTED
+      : SERVER_MESSAGE_NUMBERS.REMATCH_REJECTED,
+    {
+      message: accept ? 'Rematch accepted!' : 'Rematch declined!'
+    }
+  );
 };
