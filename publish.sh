@@ -17,6 +17,7 @@ mkdir -p $TARGET_DIR/assets/icons
 # Copy all required files there
 echo "Copying static assets..."
 cp $BASEDIR/index.html $TARGET_DIR/index.html
+cp $BASEDIR/error.html $TARGET_DIR/error.html
 cp $BASEDIR/favicon.png $TARGET_DIR/favicon.png
 cp $BASEDIR/meta-img.webp $TARGET_DIR/meta-img.webp
 cp $BASEDIR/robots.txt $TARGET_DIR/robots.txt
@@ -48,6 +49,8 @@ for file in $BASEDIR/assets/js/*.js; do
     # Change it from the index file
     cat $TARGET_DIR/index.html | sed -e "s/$filename/$final_filename/g" >$TARGET_DIR/index.html.tmp
     mv $TARGET_DIR/index.html.tmp $TARGET_DIR/index.html
+    cat $TARGET_DIR/error.html | sed -e "s/$filename/$final_filename/g" >$TARGET_DIR/error.html.tmp
+    mv $TARGET_DIR/error.html.tmp $TARGET_DIR/error.html
 done
 
 # Minify the CSS files
@@ -75,4 +78,6 @@ for file in $BASEDIR/assets/css/*.css; do
     # Change it from the index file
     cat $TARGET_DIR/index.html | sed -e "s/$filename/$final_filename/g" >$TARGET_DIR/index.html.tmp
     mv $TARGET_DIR/index.html.tmp $TARGET_DIR/index.html
+    cat $TARGET_DIR/error.html | sed -e "s/$filename/$final_filename/g" >$TARGET_DIR/error.html.tmp
+    mv $TARGET_DIR/error.html.tmp $TARGET_DIR/error.html
 done

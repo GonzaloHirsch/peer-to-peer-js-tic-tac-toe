@@ -13,7 +13,8 @@
     "tf_format": "cd terraform && terraform fmt -recursive",
     "tf_lint": "cd terraform && terraform fmt -check -recursive",
     "tf_apply": "cd terraform && terraform apply -auto-approve",
-    "generate": "./publish.sh frontend"
+    "generate": "./publish.sh frontend",
+    "serve": "(cd frontend && python3 server.py)"
   },
   "repository": {
     "type": "git",
