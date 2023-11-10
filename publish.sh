@@ -1,22 +1,27 @@
 #!/bin/bash
 
 BASEDIR=$1
+TARGET_DIR="dist"
+
+# Clear dist folder
+echo "Deleting previous artifacts..."
+rm -rf $TARGET_DIR
 
 # Create the dist folder
 echo "Creating folders..."
-mkdir -p dist/assets
-mkdir -p dist/assets/js
-mkdir -p dist/assets/css
-mkdir -p dist/assets/icons
+mkdir -p $TARGET_DIR/assets
+mkdir -p $TARGET_DIR/assets/js
+mkdir -p $TARGET_DIR/assets/css
+mkdir -p $TARGET_DIR/assets/icons
 
 # Copy all required files there
 echo "Copying static assets..."
-cp $BASEDIR/index.html dist/index.html
-cp $BASEDIR/favicon.png dist/favicon.png
-cp $BASEDIR/meta-img.webp dist/meta-img.webp
-cp $BASEDIR/robots.txt dist/robots.txt
-cp $BASEDIR/sitemap.xml dist/sitemap.xml
-cp -r $BASEDIR/assets/icons/ dist/assets/icons/
+cp $BASEDIR/index.html $TARGET_DIR/index.html
+cp $BASEDIR/favicon.png $TARGET_DIR/favicon.png
+cp $BASEDIR/meta-img.webp $TARGET_DIR/meta-img.webp
+cp $BASEDIR/robots.txt $TARGET_DIR/robots.txt
+cp $BASEDIR/sitemap.xml $TARGET_DIR/sitemap.xml
+cp -r $BASEDIR/assets/icons/ $TARGET_DIR/assets/icons/
 
 # Minify the JS files
 echo ""
@@ -39,7 +44,10 @@ for file in $BASEDIR/assets/js/*.js; do
     # Copy to destination with MD5
     final_filename=$(echo $filename | sed -e "s/\.js/_$file_md5\.js/g")
     echo "Final filename for $file is $final_filename"
-    cp $temp_file "dist/assets/js/$final_filename"
+    cp $temp_file "$TARGET_DIR/assets/js/$final_filename"
+    # Change it from the index file
+    cat $TARGET_DIR/index.html | sed -e "s/$filename/$final_filename/g" >$TARGET_DIR/index.html.tmp
+    mv $TARGET_DIR/index.html.tmp $TARGET_DIR/index.html
 done
 
 # Minify the CSS files
@@ -63,5 +71,8 @@ for file in $BASEDIR/assets/css/*.css; do
     # Copy to destination with MD5
     final_filename=$(echo $filename | sed -e "s/\.css/_$file_md5\.css/g")
     echo "Final filename for $file is $final_filename"
-    cp $temp_file "dist/assets/css/$final_filename"
+    cp $temp_file "$TARGET_DIR/assets/css/$final_filename"
+    # Change it from the index file
+    cat $TARGET_DIR/index.html | sed -e "s/$filename/$final_filename/g" >$TARGET_DIR/index.html.tmp
+    mv $TARGET_DIR/index.html.tmp $TARGET_DIR/index.html
 done
