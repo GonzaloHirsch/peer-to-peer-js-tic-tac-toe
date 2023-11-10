@@ -1,5 +1,5 @@
 {
-  "name": "alexa-skill-movie-integrations",
+  "name": "peer-to-peer-js-tic-tac-toe",
   "version": "1.2.1",
   "description": "Source code for an Alexa skill that interacts with The Movie DB API in order to provide a service to look up stream locations based on the device country.",
   "main": "src/index.js",
@@ -12,18 +12,19 @@
     "toc": "npx markdown-toc README.md --no-firsth1",
     "tf_format": "cd terraform && terraform fmt -recursive",
     "tf_lint": "cd terraform && terraform fmt -check -recursive",
-    "tf_apply": "cd terraform && terraform apply -auto-approve"
+    "tf_apply": "cd terraform && terraform apply -auto-approve",
+    "generate": "./publish.sh frontend"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/GonzaloHirsch/alexa-skill-movie-integrations.git"
+    "url": "https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe.git"
   },
   "author": "Gonzalo Hirsch <hirschgonzalo@gmail.com> (https://gonzalohirsch.com)",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/GonzaloHirsch/alexa-skill-movie-integrations/issues"
+    "url": "https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/issues"
   },
-  "homepage": "https://gonzalohirsch.github.io/alexa-skill-movie-integrations/",
+  "homepage": "https://gonzalohirsch.github.io/peer-to-peer-js-tic-tac-toe/",
   "release": {
     "branches": [
       "main"
@@ -50,10 +51,6 @@
       "@semantic-release/github"
     ]
   },
-  "dependencies": {
-    "ask-sdk-core": "2.14.0",
-    "axios": "1.4.0"
-  },
   "devDependencies": {
     "@semantic-release/changelog": "6.0.3",
     "@semantic-release/commit-analyzer": "10.0.1",
@@ -67,6 +64,8 @@
     "eslint-plugin-prettier": "5.0.0",
     "markdown-toc": "1.2.0",
     "prettier": "3.0.0",
-    "semantic-release": "21.0.7"
+    "semantic-release": "21.0.7",
+    "uglify-js": "^3.17.4",
+    "uglifycss": "^0.0.29"
   }
 }
