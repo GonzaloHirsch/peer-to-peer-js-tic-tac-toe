@@ -312,7 +312,6 @@ const switchPlayerTurnVisually = () => {
   // If it's the player turn, enable it for them
   if (gameState.playMode === PLAY_MODE.P2P) {
     if (isPlayerTurn()) {
-      console.log(gameState.playMode, gameState.turn, gameState.player);
       turnCover.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
     } else {
       turnCover.classList.remove(CSS_CLASSES.ENSURE_HIDDEN);
@@ -436,6 +435,7 @@ const startGame = (playMode, firstPlayer) => {
   gameState.canChooseBoard = true;
   gameState.movementChoseBoard = true;
   gameState.winner = undefined;
+  gameState.stopped = false;
   // Switch turn to the current player, this will leave the player
   switchPlayerTurn(STATES.X);
   // Visually enable the game
@@ -455,7 +455,6 @@ const startGameP2P = (firstPlayer = false) => {
 };
 
 const endGame = (winner) => {
-  console.log(winner);
   setupEndgameText(
     winner !== STATES.TIE
       ? `The winner is: <span id="winner">${winner}</span>`
@@ -485,6 +484,23 @@ const handleRemoteMovements = (movements) => {
         break;
     }
   });
+};
+
+const markGameAsStopped = () => {
+  gameState.stopped = true;
+};
+
+const resetGame = (message) => {
+  // Set the text
+  setupEndgameText(message);
+  // Reset state
+  gameState = {};
+  // Visual cues
+  rematchButton.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
+  rematchOptionButtons.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
+  turnCover.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
+  cover.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
+  endCover.classList.remove(CSS_CLASSES.ENSURE_HIDDEN);
 };
 
 // Ensure to call functions as early as possible for experience

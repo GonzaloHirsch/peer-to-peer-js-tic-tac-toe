@@ -8,6 +8,9 @@ const getPeerText = (peerId) => `Your peer ID is: ${peerId}`;
 let serverList = [];
 let peer;
 let connection;
+let buttonP2P = document.getElementById(IDS.BUTTON_P2P);
+let buttonLocal = document.getElementById(IDS.BUTTON_LOCAL);
+let buttonDisconnect = document.getElementById(IDS.BUTTON_DISCONNECT);
 
 const getListOfServers = () => {
   return axios({
@@ -41,6 +44,10 @@ const startServerConnection = () => {
     hiddenElems.forEach((elem) => elem.classList.remove('hidden'));
     // Disable instructions, show the server selection list
     getAndShowListOfServers(false);
+    // Disable the connection buttons
+    buttonP2P.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
+    buttonLocal.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
+    buttonDisconnect.classList.remove(CSS_CLASSES.ENSURE_HIDDEN);
   });
   // Establish listener for the connection
   peer.on('connection', (conn) => {
@@ -66,6 +73,10 @@ const closeServerConnection = () => {
   // Destroy the peer for cleanup
   peer.destroy();
   peer = undefined;
+  // Show the connect buttons again
+  buttonP2P.classList.remove(CSS_CLASSES.ENSURE_HIDDEN);
+  buttonLocal.classList.remove(CSS_CLASSES.ENSURE_HIDDEN);
+  buttonDisconnect.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
 };
 
 /* 
@@ -148,13 +159,7 @@ const setConnectorConnectionListeners = (conn) => {
     // Receive messages
   });
   // Ensure connection is closed from both ends
-  connection.on('close', () => {
-    console.warn(
-      'Closing connection because a close event was received from the other end.'
-    );
-    connection.close();
-    connection = undefined;
-  });
+  connection.on('close', () => handleClosedConnection());
   // Ensure correct signaling for errors
   connection.on('error', () => {
     console.log("SUPER ERROR")
@@ -179,11 +184,20 @@ const setConnecteeConnectionListeners = (conn) => {
     startGameP2P(false);
   });
   // Ensure connection is closed from both ends
-  connection.on('close', () => {
-    connection.close();
-    connection = undefined;
-  });
+  connection.on('close', () => handleClosedConnection());
 };
+
+const handleClosedConnection = () => {
+  console.warn(
+    'Closing connection because a close event was received from the other end.'
+  );
+  connection.close();
+  connection = undefined;
+  // Handle when there was another player playing and you were waiting
+  resetGame(
+    `Game was closed by one of the players, it cannot be continued. ${MESSAGES.INSTRUCTIONS}`
+  );
+}
 
 /* 
 ------------------------------------------------------------------------------------------
@@ -192,7 +206,6 @@ Main Handler
 */
 const handleDataReceived = (data) => {
   payload = JSON.parse(data);
-  console.log(`Received ${JSON.stringify(payload)}`);
   // Handle different use cases
   switch (payload.status) {
     // Player rejected because of another connection

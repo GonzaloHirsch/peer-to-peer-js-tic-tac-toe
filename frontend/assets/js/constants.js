@@ -21,7 +21,10 @@ const IDS = {
   WINNER: 'winner',
   SERVER_LIST: 'server-list',
   REMATCH_BTN: 'end-rematch-button',
-  END_REMATCH: 'end-rematch'
+  END_REMATCH: 'end-rematch',
+  BUTTON_P2P: 'button-p2p',
+  BUTTON_DISCONNECT: 'button-disconnect',
+  BUTTON_LOCAL: 'button-local'
 };
 // CSS Classes
 const CSS_CLASSES = {
