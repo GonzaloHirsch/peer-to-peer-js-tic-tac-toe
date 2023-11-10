@@ -162,7 +162,7 @@ const setConnectorConnectionListeners = (conn) => {
   connection.on('close', () => handleClosedConnection());
   // Ensure correct signaling for errors
   connection.on('error', () => {
-    console.log("SUPER ERROR")
+    console.log('SUPER ERROR');
   });
 };
 
@@ -197,7 +197,7 @@ const handleClosedConnection = () => {
   resetGame(
     `Game was closed by one of the players, it cannot be continued. ${MESSAGES.INSTRUCTIONS}`
   );
-}
+};
 
 /* 
 ------------------------------------------------------------------------------------------
