@@ -24,6 +24,14 @@ cp $BASEDIR/robots.txt $TARGET_DIR/robots.txt
 cp $BASEDIR/sitemap.xml $TARGET_DIR/sitemap.xml
 cp -r $BASEDIR/assets/icons/ $TARGET_DIR/assets/icons/
 
+function add_file_revving() {
+    target_file=$1
+    original_filename=$2
+    revved_filename=$3
+    cat $target_file | sed -e "s/$original_filename/$revved_filename/g" >$target_file.tmp
+    mv $target_file.tmp $target_file
+}
+
 # Minify the JS files
 echo ""
 echo "Minifying JS..."
@@ -47,10 +55,8 @@ for file in $BASEDIR/assets/js/*.js; do
     echo "Final filename for $file is $final_filename"
     cp $temp_file "$TARGET_DIR/assets/js/$final_filename"
     # Change it from the index file
-    cat $TARGET_DIR/index.html | sed -e "s/$filename/$final_filename/g" >$TARGET_DIR/index.html.tmp
-    mv $TARGET_DIR/index.html.tmp $TARGET_DIR/index.html
-    cat $TARGET_DIR/error.html | sed -e "s/$filename/$final_filename/g" >$TARGET_DIR/error.html.tmp
-    mv $TARGET_DIR/error.html.tmp $TARGET_DIR/error.html
+    add_file_revving $TARGET_DIR/index.html $filename $final_filename
+    add_file_revving $TARGET_DIR/error.html $filename $final_filename
 done
 
 # Minify the CSS files
@@ -76,8 +82,6 @@ for file in $BASEDIR/assets/css/*.css; do
     echo "Final filename for $file is $final_filename"
     cp $temp_file "$TARGET_DIR/assets/css/$final_filename"
     # Change it from the index file
-    cat $TARGET_DIR/index.html | sed -e "s/$filename/$final_filename/g" >$TARGET_DIR/index.html.tmp
-    mv $TARGET_DIR/index.html.tmp $TARGET_DIR/index.html
-    cat $TARGET_DIR/error.html | sed -e "s/$filename/$final_filename/g" >$TARGET_DIR/error.html.tmp
-    mv $TARGET_DIR/error.html.tmp $TARGET_DIR/error.html
+    add_file_revving $TARGET_DIR/index.html $filename $final_filename
+    add_file_revving $TARGET_DIR/error.html $filename $final_filename
 done
