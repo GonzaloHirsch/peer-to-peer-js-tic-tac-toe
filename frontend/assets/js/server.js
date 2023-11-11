@@ -29,10 +29,9 @@ const startServerConnection = () => {
     );
     return;
   }
-  // Get the element to notify the user
-  const hiddenElems = document.querySelectorAll(
-    `.${CLASSES.HIDDEN_WHEN_NO_ID}`
-  );
+  // Reset the game
+  resetGame(MESSAGES.INSTRUCTIONS);
+  // Get the peer information
   const peerInfoElem = document.getElementById(IDS.PEER_INFO);
   // Create the instance of the peer with the UUID
   peer = new Peer(UUID, SERVER_CONNECTION);
@@ -40,8 +39,8 @@ const startServerConnection = () => {
   peer.on('open', (id) => {
     // Set the text for the peer info
     peerInfoElem.innerText = getPeerText(id);
-    // Show the peer info
-    hiddenElems.forEach((elem) => elem.classList.remove('hidden'));
+    // Show items
+    setIdDependentItemsStatus(true);
     // Disable instructions, show the server selection list
     getAndShowListOfServers(false);
     // Disable the connection buttons
@@ -77,6 +76,32 @@ const closeServerConnection = () => {
   buttonP2P.classList.remove(CSS_CLASSES.ENSURE_HIDDEN);
   buttonLocal.classList.remove(CSS_CLASSES.ENSURE_HIDDEN);
   buttonDisconnect.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
+  // Hide the server list
+  const serverListElem = document.getElementById(IDS.SERVER_LIST);
+  serverListElem.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
+  // Show items
+  setIdDependentItemsStatus(false);
+};
+
+/* 
+------------------------------------------------------------------------------------------
+Visual Elements
+------------------------------------------------------------------------------------------
+*/
+
+const setIdDependentItemsStatus = (visible) => {
+  // Get the element to notify the user
+  const hiddenElems = document.querySelectorAll(
+    `.${CLASSES.HIDDEN_WHEN_NO_ID}`
+  );
+  // Show the peer info
+  hiddenElems.forEach((elem) => {
+    if (visible) {
+      elem.classList.remove(CSS_CLASSES.ENSURE_HIDDEN);
+    } else {
+      elem.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
+    }
+  });
 };
 
 /* 
@@ -87,7 +112,7 @@ Server Listing
 const showListOfServers = (isRefresh = false) => {
   const serverListElem = document.getElementById(IDS.SERVER_LIST);
   // Show the server selection screen
-  serverListElem.classList.remove('hidden_ensure');
+  serverListElem.classList.remove(CSS_CLASSES.ENSURE_HIDDEN);
   // Remove all children
   clearChildren(serverListElem);
   let serverItem;
@@ -195,7 +220,7 @@ const handleClosedConnection = () => {
   connection = undefined;
   // Handle when there was another player playing and you were waiting
   resetGame(
-    `Game was closed by one of the players, it cannot be continued. ${MESSAGES.INSTRUCTIONS}`
+    `Game was closed by one of the players, it cannot be continued (or the match was rejected). ${MESSAGES.INSTRUCTIONS}`
   );
 };
 
