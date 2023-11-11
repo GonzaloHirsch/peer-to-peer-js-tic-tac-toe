@@ -455,6 +455,18 @@ const startGameP2P = (firstPlayer = false) => {
 };
 
 const endGame = (winner) => {
+  // Tracking event
+  gtag('event', TRACKING_EVENTS.MATCH_RESULT, {
+    winner: winner,
+    playMode: gameState.playMode,
+    totalMoves: gameState.completedCells.reduce((accum, currentVal) => {
+      accum +
+        currentVal.reduce(
+          (subaccum, subcurrentVal) => subaccum + subcurrentVal,
+          0
+        );
+    }, 0)
+  });
   setupEndgameText(
     winner !== STATES.TIE
       ? `The winner is: <span id="winner">${winner}</span>`

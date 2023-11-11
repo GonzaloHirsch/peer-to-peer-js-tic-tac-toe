@@ -18,10 +18,16 @@ const getListOfServers = () => {
     url: `https://${SERVER_URI}/${SERVER_KEY}/peers`
   }).then((response) => {
     serverList = response.data;
+    gtag('event', TRACKING_EVENTS.SERVER_CONNECTION_LIST, {
+      uuid: UUID
+    });
   });
 };
 
 const startServerConnection = () => {
+  gtag('event', TRACKING_EVENTS.SERVER_CONNECTION_START, {
+    uuid: UUID
+  });
   // Ensure there is no duplicate peer
   if (peer) {
     console.error(
@@ -35,6 +41,9 @@ const startServerConnection = () => {
   const peerInfoElem = document.getElementById(IDS.PEER_INFO);
   // Create the instance of the peer with the UUID
   peer = new Peer(UUID, SERVER_CONNECTION);
+  gtag('event', TRACKING_EVENTS.SERVER_CONNECTION_FINISH, {
+    uuid: UUID
+  });
   // Actually establish the connection
   peer.on('open', (id) => {
     // Set the text for the peer info
@@ -81,6 +90,9 @@ const closeServerConnection = () => {
   serverListElem.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
   // Show items
   setIdDependentItemsStatus(false);
+  gtag('event', TRACKING_EVENTS.SERVER_CONNECTION_CLOSE, {
+    uuid: UUID
+  });
 };
 
 /* 
@@ -213,6 +225,9 @@ const setConnecteeConnectionListeners = (conn) => {
 };
 
 const handleClosedConnection = () => {
+  gtag('event', TRACKING_EVENTS.PEER_CONNECTION_CLOSE, {
+    uuid: UUID
+  });
   console.warn(
     'Closing connection because a close event was received from the other end.'
   );
@@ -246,10 +261,18 @@ const handleDataReceived = (data) => {
       connection = undefined;
       // Display the information that the player rejected it
       handleRematchRemoteDecline();
+      gtag('event', TRACKING_EVENTS.REMATCH_RESPONSE, {
+        uuid: UUID,
+        accept: false
+      });
       break;
     // Match/rematch accepted, start the game as the first player
-    case SERVER_MESSAGE_NUMBERS.ACCEPTED:
     case SERVER_MESSAGE_NUMBERS.REMATCH_ACCEPTED:
+      gtag('event', TRACKING_EVENTS.REMATCH_RESPONSE, {
+        uuid: UUID,
+        accept: true
+      });
+    case SERVER_MESSAGE_NUMBERS.ACCEPTED:
       startGameP2P(true);
       break;
     // New Movement
@@ -259,6 +282,10 @@ const handleDataReceived = (data) => {
     // Rematch request
     case SERVER_MESSAGE_NUMBERS.REMATCH:
       handleRematchRequest(payload.data?.message || '');
+      gtag('event', TRACKING_EVENTS.REMATCH_RESPONSE, {
+        uuid: UUID,
+        accept: true
+      });
       break;
   }
 };

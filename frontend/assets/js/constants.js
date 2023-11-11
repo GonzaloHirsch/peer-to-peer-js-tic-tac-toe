@@ -139,3 +139,17 @@ const SERVER_CONNECTION = {
 };
 // Timeout in seconds
 const SERVER_REFRESH_TIMEOUT = 60;
+
+/* 
+------------------------------------------------------------------------------------------
+Tracking
+------------------------------------------------------------------------------------------
+*/
+const TRACKING_EVENTS = {
+  SERVER_CONNECTION_START: 'server_connection_start',
+  SERVER_CONNECTION_FINISH: 'server_connection_finish',
+  SERVER_CONNECTION_CLOSE: 'server_connection_close',
+  SERVER_CONNECTION_LIST: 'server_connection_list',
+  PEER_CONNECTION_CLOSE: 'peer_connection_close',
+  MATCH_RESULT: 'match_result'
+};
