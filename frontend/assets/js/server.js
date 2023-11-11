@@ -261,17 +261,9 @@ const handleDataReceived = (data) => {
       connection = undefined;
       // Display the information that the player rejected it
       handleRematchRemoteDecline();
-      gtag('event', TRACKING_EVENTS.REMATCH_RESPONSE, {
-        uuid: UUID,
-        accept: false
-      });
       break;
     // Match/rematch accepted, start the game as the first player
     case SERVER_MESSAGE_NUMBERS.REMATCH_ACCEPTED:
-      gtag('event', TRACKING_EVENTS.REMATCH_RESPONSE, {
-        uuid: UUID,
-        accept: true
-      });
     case SERVER_MESSAGE_NUMBERS.ACCEPTED:
       startGameP2P(true);
       break;
@@ -282,10 +274,6 @@ const handleDataReceived = (data) => {
     // Rematch request
     case SERVER_MESSAGE_NUMBERS.REMATCH:
       handleRematchRequest(payload.data?.message || '');
-      gtag('event', TRACKING_EVENTS.REMATCH_RESPONSE, {
-        uuid: UUID,
-        accept: true
-      });
       break;
   }
 };
@@ -339,6 +327,9 @@ const sendRematch = () => {
   sendMessage(SERVER_MESSAGE_NUMBERS.REMATCH, {
     message: 'Fancy a rematch?'
   });
+  gtag('event', TRACKING_EVENTS.REMATCH_REQUEST, {
+    uuid: UUID
+  });
 };
 
 const respondToRematch = (accept) => {
@@ -350,4 +341,8 @@ const respondToRematch = (accept) => {
       message: accept ? 'Rematch accepted!' : 'Rematch declined!'
     }
   );
+  gtag('event', TRACKING_EVENTS.REMATCH_RESPONSE, {
+    uuid: UUID,
+    accept: accept
+  });
 };

@@ -151,5 +151,7 @@ const TRACKING_EVENTS = {
   SERVER_CONNECTION_CLOSE: 'server_connection_close',
   SERVER_CONNECTION_LIST: 'server_connection_list',
   PEER_CONNECTION_CLOSE: 'peer_connection_close',
-  MATCH_RESULT: 'match_result'
+  MATCH_RESULT: 'match_result',
+  REMATCH_REQUEST: 'peer_rematch_request',
+  REMATCH_RESPONSE: 'peer_rematch_response'
 };
