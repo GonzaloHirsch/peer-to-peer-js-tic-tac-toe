@@ -1,3 +1,10 @@
+## [1.0.7](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/compare/v1.0.6...v1.0.7) (2023-11-12)
+
+
+### Bug Fixes
+
+* cp difference mac vs linux ([ea57bc2](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/commit/ea57bc2d5664439a025b162f75df2a2ffe993816))
+
 ## [1.0.6](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/compare/v1.0.5...v1.0.6) (2023-11-12)
 
 
