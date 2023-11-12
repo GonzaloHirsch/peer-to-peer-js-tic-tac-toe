@@ -12,7 +12,11 @@ let buttonP2P = document.getElementById(IDS.BUTTON_P2P);
 let buttonLocal = document.getElementById(IDS.BUTTON_LOCAL);
 let buttonDisconnect = document.getElementById(IDS.BUTTON_DISCONNECT);
 
-const getListOfServers = () => {
+/**
+ * Gets the list of available peers to connect to.
+ * @returns a promise that resolves to the list of peers.
+ */
+const getListOfPeers = () => {
   return axios({
     method: 'get',
     url: `https://${SERVER_URI}/${SERVER_KEY}/peers`
@@ -24,6 +28,10 @@ const getListOfServers = () => {
   });
 };
 
+/**
+ * Tries to start a new server connection to the signaling server.
+ * @returns undefined.
+ */
 const startServerConnection = () => {
   gtag('event', TRACKING_EVENTS.SERVER_CONNECTION_START, {
     uuid: UUID
@@ -51,7 +59,7 @@ const startServerConnection = () => {
     // Show items
     setIdDependentItemsStatus(true);
     // Disable instructions, show the server selection list
-    getAndShowListOfServers(false);
+    getAndShowListOfPeers(false);
     // Disable the connection buttons
     buttonP2P.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
     buttonLocal.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
@@ -73,7 +81,7 @@ const startServerConnection = () => {
 
 /**
  * Closes the connection to the server, if present.
- * @returns nothing
+ * @returns undefined.
  */
 const closeServerConnection = () => {
   // Do nothing if no peer
@@ -101,6 +109,10 @@ Visual Elements
 ------------------------------------------------------------------------------------------
 */
 
+/**
+ * Sets the visibility status for all the UUID-dependent items.
+ * @param {boolean} visible flag to determine if items are visible or not
+ */
 const setIdDependentItemsStatus = (visible) => {
   // Get the element to notify the user
   const hiddenElems = document.querySelectorAll(
@@ -121,7 +133,11 @@ const setIdDependentItemsStatus = (visible) => {
 Server Listing
 ------------------------------------------------------------------------------------------
 */
-const showListOfServers = (isRefresh = false) => {
+/**
+ * Shows the list of peers previously obtained.
+ * @param {boolean} isRefresh flag to determine if the action was a refresh, for backoff.
+ */
+const showListOfPeers = (isRefresh = false) => {
   const serverListElem = document.getElementById(IDS.SERVER_LIST);
   // Show the server selection screen
   serverListElem.classList.remove(CSS_CLASSES.ENSURE_HIDDEN);
@@ -131,7 +147,7 @@ const showListOfServers = (isRefresh = false) => {
   // Create a refresh element as the first one
   const refreshElem = document.createElement('button');
   refreshElem.innerHTML = 'Refresh List';
-  refreshElem.setAttribute('onclick', `getAndShowListOfServers(true)`);
+  refreshElem.setAttribute('onclick', `getAndShowListOfPeers(true)`);
   refreshElem.classList.add('refresh');
   serverListElem.appendChild(refreshElem);
   // If it is a refresh, must disable it for some timeout
@@ -151,7 +167,7 @@ const showListOfServers = (isRefresh = false) => {
       if (server !== UUID) {
         serverItem = document.createElement('button');
         serverItem.innerHTML = `${server}`;
-        serverItem.setAttribute('onclick', `handleSelectServer('${server}')`);
+        serverItem.setAttribute('onclick', `handleSelectPeer('${server}')`);
         serverListElem.appendChild(serverItem);
       }
     });
@@ -165,14 +181,22 @@ const showListOfServers = (isRefresh = false) => {
   }
 };
 
-const getAndShowListOfServers = (isRefresh = false) => {
-  getListOfServers().then(() => {
+/**
+ * Utility to get the list of peers and show it at the same time.
+ * @param {boolean} isRefresh flag to determine if it's a refresh.
+ */
+const getAndShowListOfPeers = (isRefresh = false) => {
+  getListOfPeers().then(() => {
     // Show the server selection screen
-    showListOfServers(isRefresh);
+    showListOfPeers(isRefresh);
   });
 };
 
-const handleSelectServer = (peerId) => {
+/**
+ * Handles the selection of a peer, will try to connect to it.
+ * @param {string} peerId for the peer to try to connect to.
+ */
+const handleSelectPeer = (peerId) => {
   // Connection in case I'm the one creating it
   setConnectorConnectionListeners(peer.connect(peerId));
 };
@@ -182,6 +206,11 @@ const handleSelectServer = (peerId) => {
 Connection Listeners
 ------------------------------------------------------------------------------------------
 */
+/**
+ * Sets the listeners for the peer that attempt to connect to the other.
+ * @param {DataConnection} conn to set listeners to.
+ * @returns undefined.
+ */
 const setConnectorConnectionListeners = (conn) => {
   // Ensure it only has 1 connection
   if (connection) {
@@ -203,6 +232,11 @@ const setConnectorConnectionListeners = (conn) => {
   });
 };
 
+/**
+ * Sets the listeners for the peer is being connected to.
+ * @param {DataConnection} conn to set listeners to.
+ * @returns undefined.
+ */
 const setConnecteeConnectionListeners = (conn) => {
   // Ensure it only has 1 connection
   if (connection) {
@@ -224,6 +258,9 @@ const setConnecteeConnectionListeners = (conn) => {
   connection.on('close', () => handleClosedConnection());
 };
 
+/**
+ * Handles a closed connection to inform the peer correctly and clean up resources.
+ */
 const handleClosedConnection = () => {
   gtag('event', TRACKING_EVENTS.PEER_CONNECTION_CLOSE, {
     uuid: UUID
@@ -244,6 +281,10 @@ const handleClosedConnection = () => {
 Main Handler
 ------------------------------------------------------------------------------------------
 */
+/**
+ * Handles data from the remote peer, based on the payload status, performs actions.
+ * @param {any} data received from the other peer.
+ */
 const handleDataReceived = (data) => {
   payload = JSON.parse(data);
   // Handle different use cases
@@ -284,6 +325,10 @@ Messages and Signaling
 ------------------------------------------------------------------------------------------
 */
 
+/**
+ * Rejects a connection by sending a meesage and closing it.
+ * @param {DataConnection} conn being rejected.
+ */
 const rejectNewConnection = (conn) => {
   // Just log out the error
   console.error(
@@ -302,6 +347,13 @@ const rejectNewConnection = (conn) => {
   });
 };
 
+/**
+ * Sends a message to the remote peer.
+ * @param {number} status for the message.
+ * @param {any} payload to send in the message.
+ * @param {DataConnection} conn to send the message to.
+ * @returns undefined.
+ */
 const sendMessage = (status, payload, conn = undefined) => {
   // If no available connection, the connection was closed. Show that and close the connection
   if (!(conn || connection)) {
@@ -319,10 +371,17 @@ const sendMessage = (status, payload, conn = undefined) => {
   );
 };
 
+/**
+ * Sends a movement message to the peer.
+ * @param {any} payload with movement information.
+ */
 const sendMovement = (payload) => {
   sendMessage(SERVER_MESSAGE_NUMBERS.NEW_MOVE, payload);
 };
 
+/**
+ * Sends a rematch request to the remote peer.
+ */
 const sendRematch = () => {
   sendMessage(SERVER_MESSAGE_NUMBERS.REMATCH, {
     message: 'Fancy a rematch?'
@@ -332,6 +391,10 @@ const sendRematch = () => {
   });
 };
 
+/**
+ * Sends a rematch response to the peer that requested it.
+ * @param {boolean} accept flag to determine if accepted or not.
+ */
 const respondToRematch = (accept) => {
   sendMessage(
     accept

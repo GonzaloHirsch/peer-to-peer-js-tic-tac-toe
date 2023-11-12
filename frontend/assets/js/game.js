@@ -1,5 +1,6 @@
 // Local copy of the game state
 let gameState = {};
+// Variables for the different elements that I might use
 let cover = document.getElementById(IDS.COVER);
 let gameBox = document.getElementById(IDS.GAME_BOX);
 let turnCover = document.getElementById(IDS.TURN_COVER);
@@ -12,6 +13,12 @@ let rematchOptionButtons = document.getElementById(IDS.END_REMATCH);
 Building the Game
 ------------------------------------------------------------------------------------------
 */
+/**
+ * Creates the board HTML structure for a single TTT board.
+ * @param {number} offsetX position of the board X
+ * @param {number} offsetY position of the board Y
+ * @returns a board HTML element.
+ */
 const buildTicTacToe = (offsetX, offsetY) => {
   const board = document.createElement('div');
   board.setAttribute('id', getBoardId(offsetX, offsetY));
@@ -46,6 +53,9 @@ const buildTicTacToe = (offsetX, offsetY) => {
   return board;
 };
 
+/**
+ * Builds all TTT boards for the main board.
+ */
 const buildBoard = () => {
   const gameBox = document.getElementById(IDS.GAME_BOX);
   gameBox.innerHTML = '';
@@ -60,6 +70,25 @@ const buildBoard = () => {
   }
 };
 
+/**
+ * Generates the internal representations for the board, used for score.
+ * @returns a matrix with the board representation as follows:
+ * ```
+ * [
+ *  [BOARD,BOARD,BOARD],
+ *  [BOARD,BOARD,BOARD],
+ *  [BOARD,BOARD,BOARD]
+ * ]
+ * ```
+ * Then each `BOARD` is represented as:
+ * ```
+ * [
+ *  [STATE,STATE,STATE],
+ *  [STATE,STATE,STATE],
+ *  [STATE,STATE,STATE],
+ * ]
+ * ```
+ */
 const buildInternalBoard = () => {
   const boardRow = Array.from(new Array(3), (_, __) => STATES.EMPTY);
   const board = Array.from(new Array(3), (_, __) => [...boardRow]);
@@ -68,6 +97,18 @@ const buildInternalBoard = () => {
   return JSON.parse(JSON.stringify(game));
 };
 
+/**
+ * Builds a representation for the overall state of a board.
+ * @param {any} initialState number or string for state.
+ * @returns a matrix for the representation of the overall state of each board:
+ * ```
+ * [
+ *  [STATE,STATE,STATE],
+ *  [STATE,STATE,STATE],
+ *  [STATE,STATE,STATE]
+ * ]
+ * ```
+ */
 const buildInternalOverallBoard = (initialState) => {
   const boardRow = Array.from(new Array(3), (_, __) => initialState);
   const board = Array.from(new Array(3), (_, __) => [...boardRow]);
@@ -79,13 +120,22 @@ const buildInternalOverallBoard = (initialState) => {
 Events
 ------------------------------------------------------------------------------------------
 */
+/**
+ * Event handler for a cell click.
+ * @param {event} e event for the click.
+ * @param {number} boardX X coordinate for the board this cell belongs to.
+ * @param {number} boardY Y coordinate for the board this cell belongs to.
+ * @param {number} cellX X coordinate for this cell within it's board.
+ * @param {number} cellY Y coordinate for this cell within it's board.
+ * @param {boolean} remoteMovement flag to indicate if this is a remote movement.
+ */
 const handleCellClickWrapper = (
   e,
   boardX,
   boardY,
   cellX,
   cellY,
-  removeMovement = false
+  remoteMovement = false
 ) => {
   // Run the move and check it's valid
   const validMove = handleCellClick(
@@ -95,7 +145,7 @@ const handleCellClickWrapper = (
     boardY,
     cellX,
     cellY,
-    removeMovement
+    remoteMovement
   );
   // If the move is entirely valid and is playing in P2P, send the move
   if (validMove && gameState.playMode === PLAY_MODE.P2P) {
@@ -120,6 +170,16 @@ const handleCellClickWrapper = (
   }
 };
 
+/**
+ * Internal event handler for a cell click.
+ * @param {event} e event for the click.
+ * @param {HTMLElement} elem cell that receives the event.
+ * @param {number} boardX X coordinate for the board this cell belongs to.
+ * @param {number} boardY Y coordinate for the board this cell belongs to.
+ * @param {number} cellX X coordinate for this cell within it's board.
+ * @param {number} cellY Y coordinate for this cell within it's board.
+ * @param {boolean} remoteMovement flag to indicate if this is a remote movement.
+ */
 const handleCellClick = (
   e,
   elem,
@@ -127,10 +187,10 @@ const handleCellClick = (
   boardY,
   cellX,
   cellY,
-  removeMovement = false
+  remoteMovement = false
 ) => {
   // Ensure it's the turn of the player
-  if (!isPlayerTurn() && !removeMovement) return false;
+  if (!isPlayerTurn() && !remoteMovement) return false;
   // Ensure it fires only on choose cell
   if (gameState.state !== GAME_STATES.CHOOSE_CELL) return false;
   // Ensure it can only be clicked if on an EMPTY state.
@@ -195,9 +255,16 @@ const handleCellClick = (
   return true;
 };
 
-const handleBoardClick = (e, x, y, removeMovement = false) => {
+/**
+ * Event handler to handle selection of a board to play a movement.
+ * @param {event} e event for the click.
+ * @param {number} x X coordinate for the board belonging to the overall game.
+ * @param {number} y Y coordinate for the board belonging to the overall game.
+ * @param {boolean} remoteMovement flag to indicate if this is a remote movement.
+ */
+const handleBoardClick = (e, x, y, remoteMovement = false) => {
   // Ensure it's the turn of the player
-  if (!isPlayerTurn() && !removeMovement) return false;
+  if (!isPlayerTurn() && !remoteMovement) return false;
   // Ensure this fires only on choose board
   // It can also happen if the player has the opportunity to choose the board
   if (!gameState.canChooseBoard) {
@@ -225,6 +292,11 @@ const handleBoardClick = (e, x, y, removeMovement = false) => {
 Rematch
 ------------------------------------------------------------------------------------------
 */
+/**
+ * Handler for the input from the player requesting a rematch to another player.
+ * @param {event} e event for the click.
+ * @returns undefined.
+ */
 const handleRematch = (e) => {
   // Ensure there is a winner.
   if (!gameState.winner) {
@@ -249,6 +321,11 @@ const handleRematch = (e) => {
   }
 };
 
+/**
+ * Handles receiving a rematch request from a remote player.
+ * @param {string} message to display in the game.
+ * @returns undefined.
+ */
 const handleRematchRequest = (message) => {
   // Ensure there is a winner.
   if (!gameState.winner) {
@@ -263,6 +340,11 @@ const handleRematchRequest = (message) => {
   rematchOptionButtons.classList.remove(CSS_CLASSES.ENSURE_HIDDEN);
 };
 
+/**
+ * Handles the response from a remote player for a rematch.
+ * @param {boolean} accept flag to determine if the other player accepted a rematch.
+ * @returns undefined.
+ */
 const handleRematchResponse = (accept) => {
   // Ensure there is a winner.
   if (!gameState.winner) {
@@ -282,6 +364,9 @@ const handleRematchResponse = (accept) => {
   respondToRematch(accept);
 };
 
+/**
+ * Handles a negative response from the other player for a rematch.
+ */
 const handleRematchRemoteDecline = () => {
   // Hide the buttons
   rematchOptionButtons.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
@@ -297,6 +382,10 @@ const handleRematchRemoteDecline = () => {
 Utilities
 ------------------------------------------------------------------------------------------
 */
+/**
+ * Switches the game state to the next one, setting the correct attributes.
+ * @param {GAME_STATES} nextState for the game to switch to.
+ */
 const switchPlayerTurn = (nextState) => {
   // Switch the turn
   gameState.turn = nextState;
@@ -308,6 +397,9 @@ const switchPlayerTurn = (nextState) => {
   switchPlayerTurnVisually();
 };
 
+/**
+ * Switches the game turn VISUALLY to reflect changes in the turns.
+ */
 const switchPlayerTurnVisually = () => {
   // If it's the player turn, enable it for them
   if (gameState.playMode === PLAY_MODE.P2P) {
@@ -319,16 +411,46 @@ const switchPlayerTurnVisually = () => {
   }
 };
 
+/**
+ * Utility to get the opposite state for the game.
+ * @param {GAME_STATES} currState for the game.
+ * @returns the opposite state for the game.
+ */
 const getOppositeState = (currState) => {
   return currState === STATES.X ? STATES.O : STATES.X;
 };
 
+/**
+ * Utility to determine if the turn is for the current player in the machine. This is meant to be used for remote sessions.
+ * @returns boolean flag that determines if this is the player turn or not.
+ */
 const isPlayerTurn = () =>
   gameState.playMode === PLAY_MODE.LOCAL || gameState.turn === gameState.player;
 
+/**
+ * Generates an identification number for the board based on the coordinates.
+ * @param {number} x coordinate for the board.
+ * @param {number} y coordinate for the board.
+ * @returns a string for the unique board ID.
+ */
 const getBoardId = (x, y) => `board_${x}_${y}`;
+
+/**
+ * Generates an identification number for the cell based on the coordinates of both the cell and the board.
+ * @param {number} bx coordinate for the board.
+ * @param {number} by coordinate for the board.
+ * @param {number} cx coordinate for the cell.
+ * @param {number} cy coordinate for the cell.
+ * @returns a string for the unique cell ID.
+ */
 const getCellId = (bx, by, cx, cy) => `cell_${bx}_${by}_${cx}_${cy}`;
 
+/**
+ * Determines the next playing board and activates it accordingly.
+ * @param {number} x coordinate for the next board.
+ * @param {number} y coordinate for the next board.
+ * @returns undefined.
+ */
 const getNextPlayingBoard = (x, y) => {
   // Ensure the types for the variables, which must be integers
   if (typeof x === 'string') x = parseInt(x);
@@ -359,6 +481,11 @@ const getNextPlayingBoard = (x, y) => {
   gameState.selectedBoardElem.setAttribute('selected', 'true');
 };
 
+/**
+ * Verifies whether there is a win condition on the board or not.
+ * @param {array} board matrix with the states of the board.
+ * @returns a string with the winner, if present.
+ */
 const checkWinCondition = (board) => {
   let winner = undefined;
   // Use an explicit for loop to be able to break out if the win condition is met
@@ -375,6 +502,12 @@ const checkWinCondition = (board) => {
   return winner;
 };
 
+/**
+ * Updates a given board (by coordinates) with the winner for it.
+ * @param {number} x coordinates for the target board.
+ * @param {number} y coordinates for the target board.
+ * @param {string} winner for the given board.
+ */
 const updateBoardWithWinner = (x, y, winner) => {
   // Visual updates
   const boardElem = document.getElementById(getBoardId(x, y));
@@ -383,6 +516,9 @@ const updateBoardWithWinner = (x, y, winner) => {
   gameState.overallBoard[x][y] = winner;
 };
 
+/**
+ * Enables the game VISUALLY to allow players to play.
+ */
 const enableGameVisually = () => {
   cover.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
   endCover.classList.add(CSS_CLASSES.ENSURE_HIDDEN);
@@ -393,18 +529,41 @@ const enableGameVisually = () => {
   }
 };
 
+/**
+ * Sets the text for the endgame component cover.
+ * @param {string} content to show in the element.
+ */
 const setupEndgameText = (content) => {
   endCover.firstElementChild.innerHTML = content;
 };
 
+/**
+ * Sets the text for the start component cover.
+ * @param {string} content to show in the element.
+ */
 const setCoverMessage = (content) => {
   cover.firstElementChild.innerHTML = content;
 };
 
+/**
+ * Sets the status of the cover element.
+ * @param {boolean} enabled flag for the element.
+ * @returns undefined.
+ */
 const setCoverStatus = (enabled) => setElemStatus(enabled, cover);
 
+/**
+ * Sets the status of the turn cover element.
+ * @param {boolean} enabled flag for the element.
+ * @returns undefined.
+ */
 const setTurnCoverStatus = (enabled) => setElemStatus(enabled, turnCover);
 
+/**
+ * General utility to set the visibility status for any HTML element.
+ * @param {boolean} enabled flag for the element.
+ * @param {HTMLElement} elem to hide/show.
+ */
 const setElemStatus = (enabled, elem) => {
   if (enabled) {
     elem.classList.remove(CSS_CLASSES.ENSURE_HIDDEN);
@@ -418,6 +577,11 @@ const setElemStatus = (enabled, elem) => {
 Game Lifecycle
 ------------------------------------------------------------------------------------------
 */
+/**
+ * General function to start the game.
+ * @param {PLAY_MODE} playMode for the game. Remote or local.
+ * @param {boolean} firstPlayer flag to determine if this player is the first one. Useful for remote sessions.
+ */
 const startGame = (playMode, firstPlayer) => {
   // Rebuilds the board
   buildBoard();
@@ -442,6 +606,9 @@ const startGame = (playMode, firstPlayer) => {
   enableGameVisually();
 };
 
+/**
+ * Starts the game in the LOCAL play mode.
+ */
 const startGameLocal = () => {
   // Ensure to close the server connection to prevent resource consumption
   closeServerConnection();
@@ -449,11 +616,19 @@ const startGameLocal = () => {
   startGame(PLAY_MODE.LOCAL, true);
 };
 
+/**
+ * Starts the game in the P2P play mode.
+ * @param {boolean} firstPlayer flag to determine if this player is the first one. Useful for remote sessions.
+ */
 const startGameP2P = (firstPlayer = false) => {
   // Start the game in P2P mode
   startGame(PLAY_MODE.P2P, firstPlayer);
 };
 
+/**
+ * Ends the game performing all the necessary functions.
+ * @param {GAME_STATES} winner for the game.
+ */
 const endGame = (winner) => {
   // Tracking event
   gtag('event', TRACKING_EVENTS.MATCH_RESULT, {
@@ -485,6 +660,10 @@ const endGame = (winner) => {
 Game Lifecycle (Exposed)
 ------------------------------------------------------------------------------------------
 */
+/**
+ * Handles movements from a remote player. Simulates the clicks locally.
+ * @param {any} movements list from the remote player.
+ */
 const handleRemoteMovements = (movements) => {
   movements.forEach((movement) => {
     switch (movement.type) {
@@ -498,10 +677,17 @@ const handleRemoteMovements = (movements) => {
   });
 };
 
+/**
+ * Flags the game as stopped to prevent unwanted movements.
+ */
 const markGameAsStopped = () => {
   gameState.stopped = true;
 };
 
+/**
+ * Resets the game, showing a message to inform the player.
+ * @param {string} message to display.
+ */
 const resetGame = (message) => {
   // Set the text
   setupEndgameText(message);
