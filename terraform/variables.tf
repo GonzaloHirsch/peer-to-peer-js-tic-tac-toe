@@ -19,3 +19,7 @@ variable "gcp_project_id" {
   type        = string
   description = "ID for the GCP project compute resources."
 }
+variable "hosted_zone_id" {
+  type        = string
+  description = "ID for the AWS Route53 hosted zone."
+}
