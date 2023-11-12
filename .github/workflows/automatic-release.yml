@@ -101,7 +101,7 @@ jobs:
         run: aws s3 sync ./dist s3://${{ secrets.S3_BUCKET }}/ --include "*" --exclude "*.html" --exclude "sitemap.xml" --exclude "assets/icons/*" --cache-control max-age=31536000,public,immutable --delete
 
       - name: Deploy non-cached files
-        run: aws s3 sync ./dist s3://${{ secrets.S3_BUCKET }}/ --exclude "*" --include "*.html" --include "sitemap.xml" --include "assets/icons/" --cache-control max-age=0,public,must-revalidate --delete
+        run: aws s3 sync ./dist s3://${{ secrets.S3_BUCKET }}/ --exclude "*" --include "*.html" --include "sitemap.xml" --include "assets/icons/*" --cache-control max-age=0,public,must-revalidate --delete
 
       - name: Invalidate dashboard cloudfront
         run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
