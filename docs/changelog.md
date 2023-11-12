@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/compare/v1.0.0...v1.0.1) (2023-11-12)
+
+
+### Bug Fixes
+
+* release files not loading ([ab47c4d](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/commit/ab47c4d2f5283a13c42f4435548f7561f48fb189))
+
 # 1.0.0 (2023-11-12)
 
 
