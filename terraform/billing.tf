@@ -3,6 +3,7 @@ data "google_billing_account" "account" {
   display_name = "My Billing Account"
 }
 
+# Billing limits for the GCP project
 resource "google_billing_budget" "budget" {
   billing_account = data.google_billing_account.account.id
   display_name    = "Billing Budget"

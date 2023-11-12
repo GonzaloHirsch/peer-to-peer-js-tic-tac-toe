@@ -1,3 +1,4 @@
+# Storage for the state
 resource "aws_s3_bucket" "state" {
   bucket = local.bucket_name
 

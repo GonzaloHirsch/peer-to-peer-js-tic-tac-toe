@@ -1,3 +1,4 @@
+# Infrastructure for the static website
 module "website" {
   source             = "github.com/GonzaloHirsch/terraform-infrastructure/static-website"
   tag_app            = local.app_tag
