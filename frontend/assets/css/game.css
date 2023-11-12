@@ -263,7 +263,7 @@ Board
 }
 
 .board[state='O']::after {
-  content: url(/dist/icons/circle.svg);
+  content: url(/assets/icons/circle.svg);
   backdrop-filter: blur(3px);
   display: block;
   position: absolute;
@@ -273,7 +273,7 @@ Board
 }
 
 .board[state='X']::after {
-  content: url(/dist/icons/cross.svg);
+  content: url(/assets/icons/cross.svg);
   backdrop-filter: blur(3px);
   display: block;
   position: absolute;
@@ -283,7 +283,7 @@ Board
 }
 
 .board[state='TIE']::after {
-  content: url(/dist/icons/dash.svg);
+  content: url(/assets/icons/dash.svg);
   backdrop-filter: blur(3px);
   display: block;
   position: absolute;
@@ -367,14 +367,14 @@ Board Cell
 }
 
 .board_cell[state='O']::after {
-  content: url(/dist/icons/circle.svg);
+  content: url(/assets/icons/circle.svg);
   display: block;
   /* text-red-700 */
   color: rgb(185 28 28);
 }
 
 .board_cell[state='X']::after {
-  content: url(/dist/icons/cross.svg);
+  content: url(/assets/icons/cross.svg);
   display: block;
   /* text-blue-700 */
   color: rgb(29 78 216);
