@@ -1,6 +1,0 @@
-remote_theme: pages-themes/primer@v0.6.0
-plugins:
-- jekyll-remote-theme # add this line to the plugins list if you already have one
-title: Movie Map
-description: Movie Map is a handy Alexa skill that helps you find where to stream, rent, or buy movies in your country without needing to browse or search for it.
-exclude: ['LISTING.md']
