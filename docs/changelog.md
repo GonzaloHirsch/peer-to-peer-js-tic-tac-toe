@@ -1,3 +1,15 @@
+# 1.0.0 (2023-11-12)
+
+
+### Bug Fixes
+
+* deployment workflow requirements ([7ce9a63](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/commit/7ce9a63c906c799b8f6f0cce8462c86086c3b5bb))
+
+
+### Features
+
+* initial release of the game ([#1](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/issues/1)) ([5c3dfd8](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/commit/5c3dfd8f221c982d506a01886e946d39801d80a9))
+
 ## [1.2.1](https://github.com/GonzaloHirsch/alexa-skill-movie-integrations/compare/v1.2.0...v1.2.1) (2023-07-29)
 
 
