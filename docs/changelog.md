@@ -1,3 +1,11 @@
+## [1.0.10](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/compare/v1.0.9...v1.0.10) (2023-11-12)
+
+
+### Bug Fixes
+
+* CSS rgba colours ([77330cc](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/commit/77330cc6f5d595b51e3fe796caa8af72b563166b))
+* remove workflow debugs ([f87d547](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/commit/f87d547134aeca05a7c43200b6178dbee0763000))
+
 ## [1.0.9](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/compare/v1.0.8...v1.0.9) (2023-11-12)
 
 
