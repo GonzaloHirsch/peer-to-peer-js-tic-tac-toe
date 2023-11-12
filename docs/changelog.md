@@ -1,3 +1,10 @@
+## [1.0.8](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/compare/v1.0.7...v1.0.8) (2023-11-12)
+
+
+### Bug Fixes
+
+* cp not copying everything ([3177a6f](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/commit/3177a6f4939b4fa34d39ad39510167b23daeca24))
+
 ## [1.0.7](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/compare/v1.0.6...v1.0.7) (2023-11-12)
 
 
