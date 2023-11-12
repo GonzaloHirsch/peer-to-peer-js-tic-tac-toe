@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/compare/v1.0.1...v1.0.2) (2023-11-12)
+
+
+### Bug Fixes
+
+* game CSS imports ([beeb7f6](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/commit/beeb7f64d793a70413033b2fdf150c7ac22aa300))
+
 ## [1.0.1](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/compare/v1.0.0...v1.0.1) (2023-11-12)
 
 
