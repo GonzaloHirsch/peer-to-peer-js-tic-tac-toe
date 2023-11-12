@@ -5,7 +5,7 @@
   margin: 0;
   padding: 0;
   border: 0;
-  color: rgb(31 41 55);
+  color: rgba(31 41 55, 1);
   line-height: 1.25;
 }
 
@@ -38,7 +38,7 @@ h3,
 h4,
 h5 {
   /* text-gray-800 */
-  color: rgb(31 41 55);
+  color: rgba(31 41 55, 1);
 }
 
 h1 {
@@ -151,7 +151,7 @@ Button
 */
 .button {
   padding: 0.5rem 0.25rem 0.5rem 0.25rem;
-  border: 0.25rem solid rgb(31, 41, 55);
+  border: 0.25rem solid rgba(31, 41, 55, 1);
   background-color: transparent;
   cursor: pointer;
   opacity: 1;
@@ -205,7 +205,7 @@ Peer Info
 .peer_info {
   font-size: large;
   /* text-gray-400 */
-  color: rgb(156 163 175);
+  color: rgba(156 163 175, 1);
 }
 
 /* 

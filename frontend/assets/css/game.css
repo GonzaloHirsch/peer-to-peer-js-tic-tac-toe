@@ -104,7 +104,7 @@ End Cover & Rematch
 */
 .end_cover .rematch_button {
   padding: 0.5rem 1rem 0.5rem 1rem;
-  border: 0.25rem solid rgb(31, 41, 55);
+  border: 0.25rem solid rgba(31, 41, 55, 1);
   background-color: white;
   cursor: pointer;
   opacity: 1;
@@ -113,34 +113,34 @@ End Cover & Rematch
   transition:
     background-color ease 0.2s,
     color ease 0.2s;
-  color: rgb(31, 41, 55);
+  color: rgba(31, 41, 55, 1);
   margin-top: 1rem;
   width: fit-content;
   margin: 1rem auto 0 auto;
 }
 
 .end_cover .rematch_button:hover {
-  background-color: rgb(189, 189, 189);
+  background-color: rgba(189, 189, 189, 1);
 }
 
 .end_cover .button_accept {
   /* text-green-500 */
-  background-color: rgb(34 197 94);
+  background-color: rgba(34 197 94, 1);
 }
 
 .end_cover .button_accept:hover {
   /* text-green-700 */
-  background-color: rgb(21 128 61);
+  background-color: rgba(21 128 61, 1);
 }
 
 .end_cover .button_decline {
   /* text-red-500 */
-  background-color: rgb(239 68 68);
+  background-color: rgba(239 68 68, 1);
 }
 
 .end_cover .button_decline:hover {
   /* text-red-700 */
-  background-color: rgb(185 28 28);
+  background-color: rgba(185 28 28, 1);
 }
 
 /* 
@@ -254,12 +254,12 @@ Board
 
 #game-box[turn='O'] .board[selected='true'] {
   /* text-blue-100 */
-  background-color: rgb(219 234 254);
+  background-color: rgba(219 234 254, 1);
 }
 
 #game-box[turn='X'] .board[selected='true'] {
   /* text-red-100 */
-  background-color: rgb(254 226 226);
+  background-color: rgba(254 226 226, 1);
 }
 
 .board[state='O']::after {
@@ -315,26 +315,26 @@ Board Cell
 .board_cell.previous_selection {
   display: block;
   /* text-purple-200 */
-  background: rgb(233 213 255);
+  background: rgba(233 213 255, 1);
 }
 
 #game-box[turn='O'][state='CHOOSE_CELL']
   .board[state='EMPTY'][selected='true']
   .board_cell {
-  background-color: rgb(219 234 254);
+  background-color: rgba(219 234 254, 1);
 }
 
 #game-box[turn='X'][state='CHOOSE_CELL']
   .board[state='EMPTY'][selected='true']
   .board_cell {
-  background-color: rgb(254 226 226);
+  background-color: rgba(254 226 226, 1);
 }
 
 #game-box[turn='X'][state='CHOOSE_CELL']
   .board[state='EMPTY'][selected='true']
   .board_cell[state='EMPTY']:hover {
   /* text-red-200 */
-  background-color: rgb(254 202 202) !important;
+  background-color: rgba(254 202 202, 1) !important;
   cursor: pointer;
 }
 
@@ -342,7 +342,7 @@ Board Cell
   .board[state='EMPTY'][selected='true']
   .board_cell[state='EMPTY']:hover {
   /* text-blue-200 */
-  background-color: rgb(191 219 254) !important;
+  background-color: rgba(191 219 254, 1) !important;
   cursor: pointer;
 }
 
@@ -352,7 +352,7 @@ Board Cell
 #game-box[turn='O'][state='CHOOSE_CELL'][choose='true']
   .board[state='EMPTY']:not([selected='true']):hover
   .board_cell {
-  background-color: rgb(219 234 254);
+  background-color: rgba(219 234 254, 1);
   cursor: pointer;
 }
 
@@ -362,7 +362,7 @@ Board Cell
 #game-box[turn='X'][state='CHOOSE_CELL'][choose='true']
   .board[state='EMPTY']:not([selected='true']):hover
   .board_cell {
-  background-color: rgb(254 226 226);
+  background-color: rgba(254 226 226, 1);
   cursor: pointer;
 }
 
@@ -370,14 +370,14 @@ Board Cell
   content: url(/assets/icons/circle.svg);
   display: block;
   /* text-red-700 */
-  color: rgb(185 28 28);
+  color: rgba(185 28 28, 1);
 }
 
 .board_cell[state='X']::after {
   content: url(/assets/icons/cross.svg);
   display: block;
   /* text-blue-700 */
-  color: rgb(29 78 216);
+  color: rgba(29 78 216, 1);
 }
 
 .board_cell:not([state='EMPTY']):hover {

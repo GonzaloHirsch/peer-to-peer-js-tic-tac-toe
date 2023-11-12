@@ -73,7 +73,7 @@ for file in $BASEDIR/assets/css/*.css; do
     mkdir -p "/tmp/$directory"
     # Uglify on a temp space
     temp_file="/tmp/$file"
-    uglifycss --ugly-comments $file >$temp_file
+    uglifycss $file >$temp_file
     # Get MD5 of contents
     file_md5=($(md5sum $temp_file))
     echo "MD5 for $file is $file_md5"
