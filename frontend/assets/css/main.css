@@ -156,10 +156,18 @@ Button
   cursor: pointer;
   opacity: 1;
   border-radius: 5px;
-  font-size: x-large;
+  font-size: medium;
   transition:
     background-color ease 0.2s,
     color ease 0.2s;
+  display: block;
+  margin: 0.5rem;
+}
+
+@media only screen and (min-width: 500px) {
+  .button {
+    font-size: x-large;
+  }
 }
 
 .button:hover {

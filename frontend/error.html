@@ -8,7 +8,7 @@
     <title>Error | P2P Ultimate Tic Tac Toe | Gonzalo Hirsch</title>
     <meta name="custom_share" content="Are you down to play some Ultimate Tic Tac Toe?" />
     <meta name="custom_share_peer" content="My peer ID is" />
-    <link rel="icon" type="image/png" href="./favicon.png" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
 
     <!-- SEO - JSON+LD -->
     <script type="application/ld+json">
@@ -154,11 +154,12 @@
             buttons at the bottom)</em>.</p>
     <div style="margin-top: 1rem;">
         <a id="meme-parent" target="_blank" rel="noopener noreferrer">
-            <img id="meme" style="max-height: 50vh; min-height: 300px;">
+            <img id="meme"
+                style="max-height: 50vh; min-height: 300px; object-fit: contain; max-width: 75vw; margin: auto 0">
         </a>
         <p id="title" style="margin-top: 0.5rem;"></p>
     </div>
-    <div style="margin-top: 2.5rem;">
+    <div style="margin-top: 2.5rem; display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center;">
         <a href="https://gonzalohirsch.com/" aria-label="Visit gonzalohirsch.com" target="_blank" class="button"
             style="text-decoration: none;">Visit
             gonzalohirsch.com</a>
@@ -179,8 +180,8 @@
         <span class="text_small" style="margin-top: 0.5rem; display: block;">VERSION_HERE</span>
     </footer>
     <!-- CSS -->
-    <link async rel="stylesheet" href="./assets/css/fonts.css" />
-    <link async rel="stylesheet" href="./assets/css/main.css" />
+    <link async rel="stylesheet" href="/assets/css/fonts.css" />
+    <link async rel="stylesheet" href="/assets/css/main.css" />
     <!-- JS -->
     <script>
         fetch('https://meme-api.com/gimme/1').then(response => response.json()).then(data => {

@@ -15,7 +15,21 @@ Instructions
   text-align: center;
   justify-content: center;
   color: white !important;
-  font-size: x-large;
+  font-size: medium;
+}
+
+@media only screen and (min-width: 500px) {
+  .game_cover,
+  .end_cover {
+    font-size: large;
+  }
+}
+
+@media only screen and (min-width: 750px) {
+  .game_cover,
+  .end_cover {
+    font-size: x-large;
+  }
 }
 
 .game_cover p,
@@ -61,7 +75,19 @@ Turn Cover
   text-align: center;
   justify-content: center;
   color: black !important;
-  font-size: x-large;
+  font-size: medium;
+}
+
+@media only screen and (min-width: 500px) {
+  .turn_cover {
+    font-size: large;
+  }
+}
+
+@media only screen and (min-width: 750px) {
+  .turn_cover {
+    font-size: x-large;
+  }
 }
 
 .turn_cover * {
@@ -237,7 +263,7 @@ Board
 }
 
 .board[state='O']::after {
-  content: url(../icons/circle.svg);
+  content: url(/dist/icons/circle.svg);
   backdrop-filter: blur(3px);
   display: block;
   position: absolute;
@@ -247,7 +273,7 @@ Board
 }
 
 .board[state='X']::after {
-  content: url(../icons/cross.svg);
+  content: url(/dist/icons/cross.svg);
   backdrop-filter: blur(3px);
   display: block;
   position: absolute;
@@ -257,7 +283,7 @@ Board
 }
 
 .board[state='TIE']::after {
-  content: url(../icons/dash.svg);
+  content: url(/dist/icons/dash.svg);
   backdrop-filter: blur(3px);
   display: block;
   position: absolute;
@@ -341,14 +367,14 @@ Board Cell
 }
 
 .board_cell[state='O']::after {
-  content: url(../icons/circle.svg);
+  content: url(/dist/icons/circle.svg);
   display: block;
   /* text-red-700 */
   color: rgb(185 28 28);
 }
 
 .board_cell[state='X']::after {
-  content: url(../icons/cross.svg);
+  content: url(/dist/icons/cross.svg);
   display: block;
   /* text-blue-700 */
   color: rgb(29 78 216);
