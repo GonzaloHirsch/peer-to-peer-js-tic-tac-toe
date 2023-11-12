@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/compare/v1.0.2...v1.0.3) (2023-11-12)
+
+
+### Bug Fixes
+
+* workflow icon copy ([a048f87](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/commit/a048f870dd68c7717b494905f60e04c5a25205c7))
+
 ## [1.0.2](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/compare/v1.0.1...v1.0.2) (2023-11-12)
 
 
