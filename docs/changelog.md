@@ -1,3 +1,10 @@
+## [1.0.9](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/compare/v1.0.8...v1.0.9) (2023-11-12)
+
+
+### Bug Fixes
+
+* rgb to rgba to prevent mangling ([4c7f153](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/commit/4c7f1538fd64818838977de089ccf27621fdea50))
+
 ## [1.0.8](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/compare/v1.0.7...v1.0.8) (2023-11-12)
 
 
