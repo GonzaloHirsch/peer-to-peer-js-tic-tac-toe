@@ -97,6 +97,9 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.S3_BUCKET_REGION }}
 
+      - name: 'Debug'
+        run: find . -type f
+
       - name: Deploy cached files
         run: aws s3 sync ./dist s3://${{ secrets.S3_BUCKET }}/ --include "*" --exclude "*.html" --exclude "sitemap.xml" --exclude "assets/icons/*" --cache-control max-age=31536000,public,immutable --delete
 
