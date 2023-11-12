@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 BASEDIR=$1
 TARGET_DIR="dist"

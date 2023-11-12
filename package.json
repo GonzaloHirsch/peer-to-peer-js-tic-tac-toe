@@ -1,13 +1,12 @@
 {
   "name": "peer-to-peer-js-tic-tac-toe",
-  "version": "1.2.1",
-  "description": "Source code for an Alexa skill that interacts with The Movie DB API in order to provide a service to look up stream locations based on the device country.",
-  "main": "src/index.js",
+  "version": "1.0.0",
+  "description": "P2P JavaScript game utilizing GCP and AWS for seamless multiplayer experiences. Collaborative, fast-paced, and cloud-powered gaming.",
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "format": "prettier --config .prettierrc 'src/**/*.js' --write",
-    "lint": "npx eslint src",
+    "format": "prettier --config .prettierrc 'frontend/**/*.js' --write",
+    "lint": "npx eslint frontend/assets/js",
     "markdown": "cat README.md > docs/development.md",
     "toc": "npx markdown-toc README.md --no-firsth1",
     "tf_format": "cd terraform && terraform fmt -recursive",
@@ -66,7 +65,7 @@
     "markdown-toc": "1.2.0",
     "prettier": "3.0.0",
     "semantic-release": "21.0.7",
-    "uglify-js": "^3.17.4",
-    "uglifycss": "^0.0.29"
+    "uglify-js": "3.17.4",
+    "uglifycss": "0.0.29"
   }
 }
