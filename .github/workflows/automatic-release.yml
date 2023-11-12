@@ -71,9 +71,35 @@ jobs:
         run: npm ci
       - name: 'Verifying the signatures'
         run: npm audit signatures
-      # Install semantic release
+      # Running Semantic Release
+      - name: 'Getting the next version via Semantic Release'
+        run: npx semantic-release@21 --dry-run
+        env:
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+      - name: Nothing to release
+        if: ${{ env.NEXT_RELEASE_VERSION == '' }}
+        uses: actions/github-script@v6
+        with:
+          script: core.setFailed('Nothing to release')
+      - name: 'Add Version to Site'
+        run: npm run version ---  ${{env.NEXT_RELEASE_VERSION}}
       - name: 'Releasing via Semantic Release'
         run: npx semantic-release@21
         env:
           GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
       # Update with version if release
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.S3_BUCKET_REGION }}
+
+      - name: Deploy cached files
+        run: aws s3 sync ./dist s3://${{ secrets.S3_BUCKET }}/ --include "*" --exclude "*.html" --exclude "sitemap.xml" --exclude "assets/icons/*" --cache-control max-age=31536000,public,immutable --delete
+
+      - name: Deploy non-cached files
+        run: aws s3 sync ./dist s3://${{ secrets.S3_BUCKET }}/ --exclude "*" --include "*.html" --include "sitemap.xml" --include "assets/icons/*" --cache-control max-age=0,public,must-revalidate --delete
+
+      - name: Invalidate dashboard cloudfront
+        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
