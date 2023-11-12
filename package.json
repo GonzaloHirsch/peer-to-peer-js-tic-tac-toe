@@ -13,6 +13,7 @@
     "tf_lint": "cd terraform && terraform fmt -check -recursive",
     "tf_apply": "cd terraform && terraform apply -auto-approve",
     "generate": "./publish.sh frontend",
+    "version": "./version.sh",
     "serve": "(cd frontend && python3 server.py)"
   },
   "repository": {
@@ -29,8 +30,15 @@
     "branches": [
       "main"
     ],
+    "tagFormat": "v${version}",
     "plugins": [
       "@semantic-release/commit-analyzer",
+      [
+        "@semantic-release/exec",
+        {
+          "verifyReleaseCmd": "echo \"NEXT_RELEASE_VERSION=${nextRelease.version}\" >> $GITHUB_ENV"
+        }
+      ],
       "@semantic-release/release-notes-generator",
       [
         "@semantic-release/changelog",
@@ -54,6 +62,7 @@
   "devDependencies": {
     "@semantic-release/changelog": "6.0.3",
     "@semantic-release/commit-analyzer": "10.0.1",
+    "@semantic-release/exec": "6.0.3",
     "@semantic-release/git": "10.0.1",
     "@semantic-release/github": "9.0.4",
     "@semantic-release/npm": "10.0.4",
