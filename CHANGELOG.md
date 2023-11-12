@@ -1,3 +1,10 @@
+## [1.0.11](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/compare/v1.0.10...v1.0.11) (2023-11-12)
+
+
+### Bug Fixes
+
+* CHANGELOG corrections ([5b42511](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/commit/5b42511298ff2749397d168a7b86e128091d6e73))
+
 ## [1.0.10](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/compare/v1.0.9...v1.0.10) (2023-11-12)
 
 ### Bug Fixes
