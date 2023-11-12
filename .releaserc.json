@@ -4,9 +4,16 @@
             "main"
         ]
     },
-    "repositoryUrl": "https://github.com/GonzaloHirsch/alexa-skill-movie-integrations.git",
+    "tagFormat": "v${version}",
+    "repositoryUrl": "https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe.git",
     "plugins": [
         "@semantic-release/commit-analyzer",
+        [
+            "@semantic-release/exec",
+            {
+                "verifyReleaseCmd": "echo \"NEXT_RELEASE_VERSION=${nextRelease.version}\" >> $GITHUB_ENV"
+            }
+        ],
         "@semantic-release/release-notes-generator",
         [
             "@semantic-release/changelog",

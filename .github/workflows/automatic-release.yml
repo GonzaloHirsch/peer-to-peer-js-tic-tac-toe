@@ -16,53 +16,30 @@ on:
         default: 'warning'
 
 jobs:
-  terraform_deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: 'Checking out code'
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      # Setting up Terraform to be able to use it afterwards
-      - name: 'Terraform Setup'
-        uses: hashicorp/setup-terraform@v2
       # Setting up Node, 18 is LTS
       - name: 'Setting up Node'
         uses: actions/setup-node@v3
         with:
           node-version: 18
       - name: 'Installing dependencies'
-        run: npm install --omit=dev
-      # Setting up the AWS credentials
-      - name: 'Configure AWS credentials'
-        uses: aws-actions/configure-aws-credentials@v2
+        run: npm ci
+      - name: 'Verifying the signatures'
+        run: npm audit signatures
+      - name: 'Build Site'
+        run: npm run generate
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v3
         with:
-          aws-access-key-id: ${{ secrets.ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.REGION }}
-      # Makes sure the Terraform code is correctly formatted
-      - name: 'Terraform Format'
-        run: terraform fmt -check -recursive
-        working-directory: terraform
-      # Initialize Terraform
-      - name: 'Terraform Init'
-        run: terraform init
-        working-directory: terraform
-      # Validate the Terraform configuration
-      - name: 'Terraform Validate'
-        run: terraform validate -no-color
-        working-directory: terraform
-      # Apply the Terraform configuration
-      - name: 'Terraform Apply'
-        run: terraform apply --auto-approve
-        working-directory: terraform
-        # Make sure we have the correct environment variables as secrets
-        env:
-          TF_VAR_account_id: ${{ secrets.account_id }}
-          TF_VAR_region: ${{ secrets.REGION }}
-          TF_VAR_backend_url: ${{ secrets.BACKEND_URL }}
-          TF_VAR_backend_key: ${{ secrets.BACKEND_KEY }}
-          TF_VAR_skill_id: ${{ secrets.SKILL_ID }}
+          name: built_site
+          path: dist
+          retention-days: 2
 
   # As per https://github.com/semantic-release/semantic-release/blob/master/docs/recipes/ci-configurations/github-actions.md
   release:
@@ -80,6 +57,10 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ steps.generate_token.outputs.token }}
+      - name: 'Download Artifact'
+        uses: actions/download-artifact@v3
+        with:
+          name: built_site
       # Setting up Node, 18 is LTS
       - name: 'Setting up Node'
         uses: actions/setup-node@v3
@@ -90,8 +71,35 @@ jobs:
         run: npm ci
       - name: 'Verifying the signatures'
         run: npm audit signatures
-      # Install semantic release
+      # Running Semantic Release
+      - name: 'Getting the next version via Semantic Release'
+        run: npx semantic-release@21 --dry-run
+        env:
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+      - name: Nothing to release
+        if: ${{ env.NEXT_RELEASE_VERSION == '' }}
+        uses: actions/github-script@v6
+        with:
+          script: core.setFailed('Nothing to release')
+      - name: 'Add Version to Site'
+        run: npm run version ---  ${{env.NEXT_RELEASE_VERSION}}
       - name: 'Releasing via Semantic Release'
         run: npx semantic-release@21
         env:
           GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+      # Update with version if release
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.S3_BUCKET_REGION }}
+
+      - name: Deploy cached files
+        run: aws s3 sync ./dist s3://${{ secrets.S3_BUCKET }}/ --include "*" --exclude "*.html" --exclude "sitemap.xml" --exclude "assets/icons/*" --cache-control max-age=31536000,public,immutable --delete
+
+      - name: Deploy non-cached files
+        run: aws s3 sync ./dist s3://${{ secrets.S3_BUCKET }}/ --exclude "*" --include "*.html" --include "sitemap.xml" --include "assets/icons/*" --cache-control max-age=0,public,must-revalidate --delete
+
+      - name: Invalidate dashboard cloudfront
+        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"

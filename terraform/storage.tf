@@ -3,6 +3,6 @@ resource "aws_s3_bucket" "state" {
 
   tags = {
     Name = local.bucket_name
-    app  = "movie-map.alexa.gonzalohirsch.com"
+    app  = local.app_tag
   }
 }

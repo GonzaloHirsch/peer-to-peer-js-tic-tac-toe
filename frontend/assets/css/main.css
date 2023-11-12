@@ -1,0 +1,270 @@
+/* Text colors: https://tailwindcss.com/docs/text-color */
+
+/* Basics */
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: rgb(31 41 55);
+  line-height: 1.25;
+}
+
+body {
+  max-width: 80rem; /* 1280px */
+  padding: 1rem;
+  margin: 0 auto 0 auto;
+  font-family:
+    'Open Sans',
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    sans-serif;
+  line-height: 1.25;
+}
+
+/* 
+------------------------------------------------------------------------------------------
+Heading
+------------------------------------------------------------------------------------------
+*/
+.heading {
+  font-weight: bold;
+  text-align: center;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  /* text-gray-800 */
+  color: rgb(31 41 55);
+}
+
+h1 {
+  font-size: 2rem; /* 32px */
+  padding-bottom: 1.5rem;
+  padding-top: 1.5rem;
+}
+
+h2 {
+  font-size: 1.75rem; /* 28px */
+  padding-bottom: 1.5rem;
+  padding-top: 1.25rem;
+}
+
+h3 {
+  font-size: 1.5rem; /* 28px */
+  padding-bottom: 1.5rem;
+  padding-top: 1rem;
+}
+
+h4 {
+  font-size: 1.375rem; /* 28px */
+  padding-bottom: 1.5rem;
+  padding-top: 0.5rem;
+}
+
+@media only screen and (min-width: 500px) {
+  h1 {
+    font-size: 3rem; /* 48px */
+  }
+
+  h2 {
+    font-size: 2.5rem; /* 40px */
+  }
+
+  h3 {
+    font-size: 2rem; /* 36px */
+  }
+
+  h4 {
+    font-size: 1.75rem; /* 28px */
+  }
+}
+
+/* 
+------------------------------------------------------------------------------------------
+Margin
+------------------------------------------------------------------------------------------
+*/
+.mx_auto {
+  margin: 0 auto 0 auto;
+}
+
+/* 
+------------------------------------------------------------------------------------------
+Text Format
+------------------------------------------------------------------------------------------
+*/
+.italic {
+  font-style: italic;
+}
+
+/* 
+------------------------------------------------------------------------------------------
+Text Size
+------------------------------------------------------------------------------------------
+*/
+.text_small {
+  font-size: small;
+}
+
+.text_medium {
+  font-size: medium;
+}
+
+.text_large {
+  font-size: large;
+}
+
+.text_xlarge {
+  font-size: x-large;
+}
+
+/* 
+------------------------------------------------------------------------------------------
+Alignment
+------------------------------------------------------------------------------------------
+*/
+.text_center {
+  text-align: center;
+}
+
+/* 
+------------------------------------------------------------------------------------------
+Visibility
+------------------------------------------------------------------------------------------
+*/
+.hidden {
+  display: none;
+}
+
+.hidden_ensure {
+  display: none !important;
+}
+
+/* 
+------------------------------------------------------------------------------------------
+Button
+------------------------------------------------------------------------------------------
+*/
+.button {
+  padding: 0.5rem 0.25rem 0.5rem 0.25rem;
+  border: 0.25rem solid rgb(31, 41, 55);
+  background-color: transparent;
+  cursor: pointer;
+  opacity: 1;
+  border-radius: 5px;
+  font-size: x-large;
+  transition:
+    background-color ease 0.2s,
+    color ease 0.2s;
+}
+
+.button:hover {
+  background-color: rgba(31, 41, 55, 0.85);
+  color: white;
+}
+
+.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* 
+------------------------------------------------------------------------------------------
+Instructions
+------------------------------------------------------------------------------------------
+*/
+.start_instructions,
+.start_instructions ~ * {
+  max-width: 56rem; /* 896px */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.start_instructions ~ p {
+  font-size: larger;
+  margin-bottom: 1rem;
+}
+
+/* 
+------------------------------------------------------------------------------------------
+Peer Info
+------------------------------------------------------------------------------------------
+*/
+.peer_info {
+  font-size: large;
+  /* text-gray-400 */
+  color: rgb(156 163 175);
+}
+
+/* 
+------------------------------------------------------------------------------------------
+Server List
+------------------------------------------------------------------------------------------
+*/
+.server_list {
+  overflow-y: auto;
+  width: 270px;
+  max-height: 200px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  border: 0.25rem solid black;
+  border-radius: 5px;
+  position: relative;
+}
+
+@media only screen and (min-width: 500px) {
+  .server_list {
+    width: 450px;
+  }
+}
+
+@media only screen and (min-width: 700px) {
+  .server_list {
+    width: 630px;
+  }
+}
+
+.server_list button:not(.refresh) {
+  font-size: large;
+  padding: 1rem 0.5rem;
+  cursor: pointer;
+  transition:
+    background-color ease 0.2s,
+    color ease 0.2s;
+}
+
+.server_list button.refresh {
+  font-size: medium;
+  position: sticky;
+  top: 0;
+  right: 0;
+  transition:
+    background-color ease 0.2s,
+    color ease 0.2s;
+  padding: 0.5rem 0.25rem;
+  border-bottom: 0.125rem solid black;
+  border-radius: 0 0 5px 5px;
+}
+
+.server_list div {
+  font-size: large;
+  padding: 1rem 0.5rem;
+}
+
+.server_list button:not(.refresh):hover {
+  background-color: rgba(31, 41, 55, 0.85);
+  color: white;
+}
+
+.server_list button:not(.disabled):hover {
+  background-color: rgba(31, 41, 55);
+  color: white;
+  cursor: pointer;
+}

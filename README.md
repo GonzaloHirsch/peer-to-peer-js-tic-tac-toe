@@ -1,5 +1,13 @@
 # Movie Map
 
+docker.io/peerjs/peerjs-server:latest
+
+Need to log in with gcloud and also `gcloud auth application-default set-quota-project PROJECT_ID`
+
+`gcloud auth application-default set-quota-project super-tic-tac-toe-server`
+
+Manually enable cloud billin https://console.developers.google.com/apis/api/cloudbilling.googleapis.com/overview?project=super-tic-tac-toe-server (cloudbilling.googleapis.com)
+
 This guide assists in the development of an Alexa skill, focusing on the given example of this skill.
 
 - [Infrastructure](#infrastructure)
@@ -16,6 +24,7 @@ This guide assists in the development of an Alexa skill, focusing on the given e
 - [Skill Configuration](#skill-configuration)
   - [Skill Testing](#skill-testing)
 - [Workflows](#workflows)
+- [Frontend](#frontend)
 
 ## Infrastructure
 
@@ -392,3 +401,15 @@ This repository contains 3 main workflows:
 3. [`testing`](.github/workflows/testing.yml) --> Validates the Terraform stack to make sure format and contents are valid.
 
 There is an extra workflow, but this is automatically added by GitHub Pages to build the page.
+
+---
+
+## Frontend
+
+### Serving Locally
+
+Generate a new certificate using OpenSSL:
+
+```bash
+openssl req -x509 -newkey rsa:4096 -keyout ./secure/key.pem -out ./secure/cert.pem -sha256 -days 3650 -nodes -subj "/C=XX/ST=London/L=London/O=GonzaloHirsch/OU=GonzaloHirsch/CN=localhost"
+```
