@@ -22,7 +22,7 @@ cp $BASEDIR/favicon.png $TARGET_DIR/favicon.png
 cp $BASEDIR/meta-img.webp $TARGET_DIR/meta-img.webp
 cp $BASEDIR/robots.txt $TARGET_DIR/robots.txt
 cp $BASEDIR/sitemap.xml $TARGET_DIR/sitemap.xml
-cp -r $BASEDIR/assets/icons/ $TARGET_DIR/assets/icons/
+cp -r $BASEDIR/assets/icons/ $TARGET_DIR/assets/icons
 
 function add_file_revving() {
     target_file=$1
