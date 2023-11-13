@@ -1,6 +1,6 @@
 {
   "name": "peer-to-peer-js-tic-tac-toe",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "P2P JavaScript game utilizing GCP and AWS for seamless multiplayer experiences. Collaborative, fast-paced, and cloud-powered gaming.",
   "private": true,
   "scripts": {
