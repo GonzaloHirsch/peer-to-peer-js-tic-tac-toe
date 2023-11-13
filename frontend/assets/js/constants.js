@@ -134,7 +134,7 @@ const SERVER_CONNECTION = {
   port: 443,
   ping: 1000 * 15, // 15s ping
   secure: true,
-  debug: 3,
+  debug: 2,
   key: SERVER_KEY
 };
 // Timeout in seconds
