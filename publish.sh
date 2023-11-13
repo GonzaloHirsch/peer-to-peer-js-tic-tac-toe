@@ -19,7 +19,7 @@ echo "Copying static assets..."
 cp $BASEDIR/index.html $TARGET_DIR/index.html
 cp $BASEDIR/error.html $TARGET_DIR/error.html
 cp $BASEDIR/favicon.png $TARGET_DIR/favicon.png
-cp $BASEDIR/meta-img.webp $TARGET_DIR/meta-img.webp
+cp $BASEDIR/meta.webp $TARGET_DIR/meta.webp
 cp $BASEDIR/robots.txt $TARGET_DIR/robots.txt
 cp $BASEDIR/sitemap.xml $TARGET_DIR/sitemap.xml
 cp $BASEDIR/assets/icons/* $TARGET_DIR/assets/icons
