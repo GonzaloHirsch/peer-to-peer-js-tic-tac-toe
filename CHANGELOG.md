@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/compare/v1.1.0...v1.1.1) (2023-11-19)
+
+
+### Bug Fixes
+
+* pinned module version by SHA ([5d7a737](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/commit/5d7a737b889dc190457ccb63e070f39376e6c826))
+
 # [1.1.0](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/compare/v1.0.13...v1.1.0) (2023-11-19)
 
 
