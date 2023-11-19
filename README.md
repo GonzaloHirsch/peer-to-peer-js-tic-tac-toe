@@ -105,7 +105,7 @@ gcp_project_id  = "XXXX"
 If you intend to run Terraform for the first time before migrating the state to a backend. Follow these steps:
 
 1. Temporarily remove the `backend.tf` file from your configuration.
-2. Initialize the stack (`terraform init`).
+2. Initialize the stack (`terraform init`, or `terraform init -upgrade`).
 3. Run the stack (`terraform apply`).
 4. Add back the `backend.tf` file.
 5. Initialize the stack again (`terraform init`) and opt to migrate the state to the backend.

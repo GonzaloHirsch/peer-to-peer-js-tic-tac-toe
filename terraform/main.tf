@@ -4,5 +4,5 @@ module "website" {
   tag_app            = local.app_tag
   app_url            = local.app_tag
   aws_hosted_zone_id = var.hosted_zone_id
-  aws_region         = "us-east-1"
+  aws_region         = var.region
 }
