@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/compare/v1.1.1...v1.1.2) (2023-11-19)
+
+
+### Bug Fixes
+
+* included missing server info removal ([ac98c2f](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/commit/ac98c2f12c29a5e8be4d836fd6f66e3bba1b169d))
+
 ## [1.1.1](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/compare/v1.1.0...v1.1.1) (2023-11-19)
 
 
