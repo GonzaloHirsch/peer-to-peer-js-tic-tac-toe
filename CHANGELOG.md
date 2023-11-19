@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/compare/v1.0.13...v1.1.0) (2023-11-19)
+
+
+### Features
+
+* security improvements to infra and site ([#2](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/issues/2)) ([08f23d2](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/commit/08f23d27762834b0a6bd3e5cf5d6b9b401a3c1dd))
+
 ## [1.0.13](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/compare/v1.0.12...v1.0.13) (2023-11-13)
 
 
