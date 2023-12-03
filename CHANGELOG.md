@@ -1,3 +1,10 @@
+## [1.1.3](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/compare/v1.1.2...v1.1.3) (2023-12-03)
+
+
+### Bug Fixes
+
+* meta image references ([f51908d](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/commit/f51908df6cb737937604b33e63ba7482ef3b5257))
+
 ## [1.1.2](https://github.com/GonzaloHirsch/peer-to-peer-js-tic-tac-toe/compare/v1.1.1...v1.1.2) (2023-11-19)
 
 
